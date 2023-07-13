@@ -14,8 +14,7 @@
 		"drizzle:push": "drizzle-kit push:mysql",
 		"prettier:lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"prettier:format": "prettier --plugin-search-dir . --write .",
-		"commitlint": "commitlint --edit",
-		"postinstall": "pnpm husky install"
+		"postinstall": "husky install"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.6",
