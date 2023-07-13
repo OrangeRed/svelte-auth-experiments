@@ -10,9 +10,10 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"generate": "drizzle-kit generate:mysql",
-		"db:push": "drizzle-kit push:mysql",
-		"db:introspect": "drizzle-kit introspect:mysql"
+		"drizzle:studio": "drizzle-kit studio",
+		"drizzle:generate": "drizzle-kit generate:mysql",
+		"drizzle:introspect": "drizzle-kit introspect:mysql",
+		"drizzle:push": "drizzle-kit push:mysql"
 	},
 	"devDependencies": {
 		"@floating-ui/dom": "^1.4.4",
