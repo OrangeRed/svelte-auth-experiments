@@ -14,6 +14,9 @@ dependencies:
   drizzle-zod:
     specifier: ^0.4.4
     version: 0.4.4(drizzle-orm@0.27.1)(zod@3.21.4)
+  lucide-svelte:
+    specifier: ^0.260.0
+    version: 0.260.0(svelte@3.59.2)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -91,6 +94,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.0.1
     version: 3.4.6(postcss@8.4.25)(svelte@3.59.2)
+  sveltekit-superforms:
+    specifier: ^1.3.0
+    version: 1.3.0(@sveltejs/kit@1.22.2)(svelte@3.59.2)(zod@3.21.4)
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2(ts-node@10.9.1)
@@ -2588,6 +2594,14 @@ packages:
       es5-ext: 0.10.62
     dev: true
 
+  /lucide-svelte@0.260.0(svelte@3.59.2):
+    resolution: {integrity: sha512-fvR/42lZdIaW9RCVIouIMO9LgxwBcE4M770Hpl1ITL2At5YamgQ8J/652mTBXnX7qfiTCND/mSVnnXGESypaEw==}
+    peerDependencies:
+      svelte: '>=3 <5'
+    dependencies:
+      svelte: 3.59.2
+    dev: false
+
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
     engines: {node: '>=12'}
@@ -3580,6 +3594,17 @@ packages:
   /svelte@3.59.2:
     resolution: {integrity: sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==}
     engines: {node: '>= 8'}
+
+  /sveltekit-superforms@1.3.0(@sveltejs/kit@1.22.2)(svelte@3.59.2)(zod@3.21.4):
+    resolution: {integrity: sha512-4bkTxuy7nr+7qSqtJVCv+CJjiGrLR2Qvy2fIelEF5qvWNkvokOZkEwEtDC2bMVgOILebhGANI3RYOVtGA/qH1w==}
+    peerDependencies:
+      '@sveltejs/kit': 1.x
+      svelte: 3.x || 4.x
+      zod: 3.x
+    dependencies:
+      '@sveltejs/kit': 1.22.2(svelte@3.59.2)(vite@4.4.3)
+      svelte: 3.59.2
+      zod: 3.21.4
     dev: true
 
   /tailwindcss@3.3.2(ts-node@10.9.1):
