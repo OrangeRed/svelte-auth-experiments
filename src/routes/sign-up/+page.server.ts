@@ -21,7 +21,11 @@ const signUpSchema = z
 			.trim()
 			.min(1, 'Last name is required')
 			.max(20, 'Must be 20 characters or less'),
-		email: z.string().email('Please enter a valid email address').max(255),
+		email: z
+			.string()
+			.email('Please enter a valid email address')
+			.min(1, 'Email is required')
+			.max(255),
 		password: z
 			.string()
 			.trim()
