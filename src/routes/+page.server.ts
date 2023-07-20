@@ -1,17 +1,22 @@
-import { db } from '$lib/db';
-import { usersTable } from '$lib/db/schema';
+import { redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, fetch }) => {
-	// TODO JWT
-	// const token = cookies.get('auth_token');
-	// if (token) {
-	// 	throw redirect(301, '/sign-in');
-	// }
+export const load: PageServerLoad = async ({ locals }) => {
+	const session = locals.auth.storedSessionId;
+	console.log('session: ', session);
 
-	const users = await db.select().from(usersTable);
-	console.log('users: ', users);
+	if (!session) {
+		throw redirect(302, '/sign-in');
+	}
 
-	return { users };
+	async function getUser() {
+		const { user } = await locals.auth.validateUser();
+		console.log(user);
+		return user;
+	}
+
+	return {
+		user: getUser()
+	};
 };
