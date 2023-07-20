@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@lucia-auth/adapter-mysql':
+    specifier: ^1.1.1
+    version: 1.1.1(@planetscale/database@1.8.0)(lucia-auth@1.8.0)
+  '@lucia-auth/tokens':
+    specifier: ^1.0.2
+    version: 1.0.2(lucia-auth@1.8.0)
   '@planetscale/database':
     specifier: ^1.8.0
     version: 1.8.0
@@ -14,6 +20,9 @@ dependencies:
   drizzle-zod:
     specifier: ^0.4.4
     version: 0.4.4(drizzle-orm@0.27.1)(zod@3.21.4)
+  lucia-auth:
+    specifier: ^1.8.0
+    version: 1.8.0
   lucide-svelte:
     specifier: ^0.260.0
     version: 0.260.0(svelte@3.59.2)
@@ -839,6 +848,30 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
+
+  /@lucia-auth/adapter-mysql@1.1.1(@planetscale/database@1.8.0)(lucia-auth@1.8.0):
+    resolution: {integrity: sha512-br+/OBDNJ+eRc6RrZnnC20ef+2VEMrXFxNYvsbryPw64ito7vg40STblpENdjJF0o4R10mjWTO43wQ+56jyXLA==}
+    peerDependencies:
+      '@planetscale/database': ^1.0.0
+      lucia-auth: ^1.4.0
+      mysql2: ^3.0.0
+    peerDependenciesMeta:
+      '@planetscale/database':
+        optional: true
+      mysql2:
+        optional: true
+    dependencies:
+      '@planetscale/database': 1.8.0
+      lucia-auth: 1.8.0
+    dev: false
+
+  /@lucia-auth/tokens@1.0.2(lucia-auth@1.8.0):
+    resolution: {integrity: sha512-gdhzw7CK+6V39+u/iGYauLblNoA+fhQzOUEkGJCrzA8Nth2VxOJQixTJxV6YATcy2PPYihJgIeU8GFhpkhYXig==}
+    peerDependencies:
+      lucia-auth: 1.x
+    dependencies:
+      lucia-auth: 1.8.0
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2593,6 +2626,10 @@ packages:
     dependencies:
       es5-ext: 0.10.62
     dev: true
+
+  /lucia-auth@1.8.0:
+    resolution: {integrity: sha512-zI8gT2AOpxTPIxYzToEdgoht+GOflrduZiHPsOEmg4/2pThOyCW3o3lXh+Uwh20tJ9QoXwQe9/Omn6PlUG6efw==}
+    dev: false
 
   /lucide-svelte@0.260.0(svelte@3.59.2):
     resolution: {integrity: sha512-fvR/42lZdIaW9RCVIouIMO9LgxwBcE4M770Hpl1ITL2At5YamgQ8J/652mTBXnX7qfiTCND/mSVnnXGESypaEw==}
