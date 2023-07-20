@@ -1,7 +1,10 @@
-import { fail } from '@sveltejs/kit';
-
 import { z } from 'zod';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
+
+import { userSchema } from '$lib/server/schema/users';
+import { auth, emailVerificationToken } from '$lib/server/auth';
+import { sendEmailVerificationLink } from '$lib/server/email';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -20,7 +23,7 @@ const signUpSchema = z
 			.max(20, 'Must be 20 characters or less'),
 		email: z.string().email('Please enter a valid email address').max(255),
 		password: z
-			.string({ required_error: 'Password is required' })
+			.string()
 			.trim()
 			.min(1, 'Password is required')
 			.min(8, 'Password must be at least 8 characters')
@@ -28,20 +31,24 @@ const signUpSchema = z
 		confirm_password: z.string().trim().min(1, 'Password is required').max(255)
 	})
 	.required()
-	.refine(({ password, confirm_password }) => confirm_password && password === confirm_password, {
-		message: "Passwords don't match",
-		path: ['confirm_password']
-	});
+	.refine(
+		(formData) => formData.confirm_password && formData.password === formData.confirm_password,
+		{
+			message: "Passwords don't match",
+			path: ['confirm_password']
+		}
+	);
 
-export const load: PageServerLoad = async () => {
-	// TODO JWT
-	// const token = event.cookies.get('auth_token');
-	// if (token) {
-	// 	throw redirect(301, '/sign-in');
-	// }
+export const load: PageServerLoad = async ({ locals }) => {
+	const { session, user } = await locals.auth.validateUser();
+
+	if (session && !user.emailVerified) {
+		throw redirect(302, '/email-verification');
+	} else if (session && user.emailVerified) {
+		throw redirect(302, '/');
+	}
 
 	const form = await superValidate(signUpSchema);
-
 	return { form };
 };
 
@@ -53,6 +60,33 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		return { form };
+		try {
+			// verify that form.data is the same shape as db.auth_user
+			const attributes = userSchema.parse(form.data);
+
+			const { userId } = await auth.createUser({
+				primaryKey: {
+					providerId: 'email', // auth method
+					providerUserId: form.data.email, // unique id when using "email" auth method
+					password: form.data.password // hashed by Lucia
+				},
+				attributes
+			});
+
+			const session = await auth.createSession(userId);
+			event.locals.auth.setSession(session); // set session cookie
+
+			const token = await emailVerificationToken.issue(userId);
+			await sendEmailVerificationLink(token.toString());
+		} catch (err) {
+			console.log(err);
+
+			return fail(500, { form, error: 'An unknown error occurred' });
+		}
+
+		// redirect to
+		// make sure you don't throw inside a try/catch block!
+		console.log('No Issues detected');
+		throw redirect(302, '/email-verification');
 	}
 };
