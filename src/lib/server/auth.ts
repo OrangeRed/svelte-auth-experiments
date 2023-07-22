@@ -7,6 +7,19 @@ import { idToken } from '@lucia-auth/tokens';
 
 import { connection } from '$lib/server/db';
 
+/**
+ * Resulting type defintion of `user` from Lucia
+ */
+export type User = {
+	userId: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	emailVerified?: boolean | null;
+};
+
+export type LuciaAuth = typeof auth;
+
 export const auth = lucia({
 	// @ts-ignore
 	adapter: planetscale(connection),
@@ -26,11 +39,9 @@ export const auth = lucia({
 			lastName: databaseUser.last_name,
 			email: databaseUser.email,
 			emailVerified: databaseUser.email_verified
-		};
+		} satisfies User;
 	}
 });
-
-export type LuciaAuth = typeof auth;
 
 export const emailVerificationToken = idToken(auth, 'email-verification', {
 	expiresIn: 60 * 60 // expiration in 1 hour,
