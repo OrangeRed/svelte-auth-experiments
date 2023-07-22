@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -31,13 +30,21 @@
 				/>
 			</svg>
 		</figure>
-		<!-- / -->
+
+		<!-- Controls -->
 		<div class="flex justify-center space-x-2">
-			<a class="btn variant-filled" href="/sign-up"> Sign up </a>
-			<a class="btn variant-filled" href="/sign-in"> Sign in </a>
-			<form method="POST" action="?/logout" use:enhance>
-				<button class="btn variant-filled"> Logout </button>
-			</form>
+			{#if !user}
+				<a class="btn variant-filled" href="/sign-up">Create an account</a>
+				<a class="btn variant-filled" href="/sign-in">Sign in</a>
+			{:else}
+				{#if !user.emailVerified}
+					<a class="btn variant-filled" href="/email-verification">Please verify your account</a>
+				{/if}
+
+				<form method="POST" action="?/logout">
+					<button class="btn variant-filled">Logout</button>
+				</form>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -49,28 +56,5 @@
 	figure svg,
 	.img-bg {
 		@apply h-64 w-64 md:h-80 md:w-80;
-	}
-	.img-bg {
-		@apply absolute z-[-1] rounded-full blur-[50px] transition-all;
-		animation: pulse 5s cubic-bezier(0, 0, 0, 0.5) infinite, glow 5s linear infinite;
-	}
-	@keyframes glow {
-		0% {
-			@apply bg-primary-400/50;
-		}
-		33% {
-			@apply bg-secondary-400/50;
-		}
-		66% {
-			@apply bg-tertiary-400/50;
-		}
-		100% {
-			@apply bg-primary-400/50;
-		}
-	}
-	@keyframes pulse {
-		50% {
-			transform: scale(1.5);
-		}
 	}
 </style>
