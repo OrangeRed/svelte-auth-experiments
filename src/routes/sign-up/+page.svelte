@@ -1,5 +1,4 @@
 <script lang="ts">
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { focusTrap } from '@skeletonlabs/skeleton';
 	import { AlertCircleIcon } from 'lucide-svelte';
@@ -7,23 +6,20 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	const { form, errors, enhance } = superForm(data.form, {
-		defaultValidator: 'clear'
+	const { form, message, errors, enhance } = superForm(data.form, {
+		defaultValidator: 'clear',
+		onUpdate: ({ form }) => {
+			form.data.confirm_password = '';
+		}
 	});
-
-	const isFocused = true;
 </script>
 
-<main
-	class="variant-gradient-primary-secondary flex h-full w-full items-center justify-center bg-gradient-to-br"
->
-	<div class="absolute top-0 z-10 m-16 w-full">
-		<SuperDebug data={$form} />
-	</div>
+<main class="flex h-full w-full items-center justify-center">
+	<section class="img-bg h-[32rem] w-[32rem]" />
 	<form
-		class="w-[400px] rounded-xl bg-surface-500 p-8 shadow-md text-token"
+		class="w-[32rem] rounded-xl border border-surface-400 bg-surface-500 p-8 text-token"
 		method="POST"
-		use:focusTrap={isFocused}
+		use:focusTrap={true}
 		use:enhance
 	>
 		<h2 class="mb-8 text-center text-2xl">Sign Up</h2>
@@ -103,6 +99,8 @@
 			{/if}
 		</div>
 		<small class="text-red-500">{$errors.confirm_password?.[0] ?? ''}</small>
+
+		<p class="pt-4 text-center text-red-500">{$message ?? ''}</p>
 
 		<div class="flex w-full justify-center p-2">
 			<button type="submit" class="btn variant-filled-success">Submit</button>

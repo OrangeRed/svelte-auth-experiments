@@ -1,10 +1,11 @@
 import { z } from 'zod';
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { LuciaError } from 'lucia-auth';
+import { error, fail, redirect } from '@sveltejs/kit';
+import { message, superValidate } from 'sveltekit-superforms/server';
 
-import { userSchema } from '$lib/server/schema/users';
 import { auth, emailVerificationToken } from '$lib/server/auth';
 import { sendEmailVerificationLink } from '$lib/server/email';
+import { userSchema, type AuthUser } from '$lib/server/schema/users';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -44,16 +45,17 @@ const signUpSchema = z
 	);
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { session, user } = await locals.auth.validateUser();
+	const { user } = await locals.auth.validateUser();
 
-	if (session && !user.emailVerified) {
+	if (user && !user.emailVerified) {
 		throw redirect(302, '/email-verification');
-	} else if (session && user.emailVerified) {
+	} else if (user && user.emailVerified) {
 		throw redirect(302, '/');
 	}
 
-	const form = await superValidate(signUpSchema);
-	return { form };
+	return {
+		form: superValidate(signUpSchema)
+	};
 };
 
 export const actions: Actions = {
@@ -65,32 +67,31 @@ export const actions: Actions = {
 		}
 
 		try {
-			// verify that form.data is the same shape as db.auth_user
-			const attributes = userSchema.parse(form.data);
-
 			const { userId } = await auth.createUser({
 				primaryKey: {
 					providerId: 'email', // auth method
 					providerUserId: form.data.email, // unique id when using "email" auth method
 					password: form.data.password // hashed by Lucia
 				},
-				attributes
+				// Ensure form.data can be inserted safely into usersTable
+				attributes: userSchema.parse(form.data satisfies AuthUser)
 			});
 
-			const session = await auth.createSession(userId);
-			event.locals.auth.setSession(session); // set session cookie
+			const [session, token] = await Promise.all([
+				auth.createSession(userId),
+				emailVerificationToken.issue(userId)
+			]);
 
-			const token = await emailVerificationToken.issue(userId);
-			await sendEmailVerificationLink(token.toString());
+			event.locals.auth.setSession(session);
+			sendEmailVerificationLink(token.toString());
 		} catch (err) {
-			console.log(err);
+			if (err instanceof LuciaError && err.message === 'AUTH_DUPLICATE_KEY_ID') {
+				return message(form, 'User already exists');
+			}
 
-			return fail(500, { form, error: 'An unknown error occurred' });
+			throw error(500);
 		}
 
-		// redirect to
-		// make sure you don't throw inside a try/catch block!
-		console.log('No Issues detected');
 		throw redirect(302, '/email-verification');
 	}
 };
