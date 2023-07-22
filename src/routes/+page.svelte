@@ -3,18 +3,18 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	const { user } = data;
+	const { user, greeting } = data;
 </script>
 
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
 
 <div class="container mx-auto flex h-full items-center justify-center">
 	<div class="flex flex-col items-center space-y-10 text-center">
-		<h2 class="h2">Welcome to Skeleton {user?.firstName ?? ''}</h2>
-
-		{#if user && !user.emailVerified}
-			<!-- content here -->
-			<p>Please verify your email</p>
+		<h2 class="h2">Welcome to Skeleton!</h2>
+		{#if user}
+			<h3 class="h3">
+				{greeting} <span class="text-orange-400">{user.firstName} {user.lastName}</span>
+			</h3>
 		{/if}
 
 		<!-- Animated Logo -->

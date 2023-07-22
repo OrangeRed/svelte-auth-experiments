@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
 import { auth } from '$lib/server/auth';
+import greetings from '$lib/greetings.json';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -12,6 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	return {
 		user: getUser(),
+		greeting: greetings.sort(() => Math.random() - Math.random())[0] ?? 'Hey'
 	};
 };
 
