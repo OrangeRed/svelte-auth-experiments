@@ -27,8 +27,8 @@ export const usersTable = mysqlTable('auth_user', {
 });
 
 /**
- * - Zod validator for inserting into `auth_user` table.
- * - `id` generation is handled by Lucia so don't do it manually.
+ * Zod validator for inserting into `auth_user` table.
+ * * `id` is generated automatically by Lucia so don't do it manually.
  */
 export const userSchema = createInsertSchema(usersTable).omit({ id: true });
 
