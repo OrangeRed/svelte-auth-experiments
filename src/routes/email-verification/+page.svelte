@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { CheckIcon } from 'lucide-svelte';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { ActionData } from './$types';
@@ -28,15 +29,17 @@
 		<h1 class="text-center text-2xl">Email verification</h1>
 
 		<p class="my-4 text-center">
-			An email verification link was sent to your inbox <br /> (i.e. console).
+			{#if !submitting && form?.success}
+				A new verification email was sent to your inbox <br /> (i.e. console).
+			{:else if !submitting}
+				A verification email was sent to your inbox <br /> (i.e. console).
+			{:else}
+				...
+			{/if}
 		</p>
 
 		<form class="flex justify-center pt-4" method="POST" use:enhance={submitForm}>
-			<button type="submit" class="btn variant-filled-success">Resend verification link</button>
+			<button type="submit" class="btn variant-filled-success">Resend verification email</button>
 		</form>
-
-		{#if !submitting && form?.success}
-			<p class="text-center">A new verification link was resent</p>
-		{/if}
 	</div>
 </main>

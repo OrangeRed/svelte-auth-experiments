@@ -1,20 +1,30 @@
 <script lang="ts">
+	import { ExternalLink } from 'lucide-svelte';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 	const { user, greeting } = data;
 </script>
 
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
-
 <div class="container mx-auto flex h-full items-center justify-center">
 	<div class="flex flex-col items-center space-y-10 text-center">
-		<h2 class="h2">Welcome to Skeleton!</h2>
 		{#if user}
 			<h3 class="h3">
 				{greeting} <span class="text-orange-400">{user.firstName} {user.lastName}</span>
 			</h3>
+
+			{#if !user.emailVerified}
+				Your account is almost ready.
+				<a class="flex text-orange-400 underline" href="/email-verification">
+					Please verify your account
+					<ExternalLink class="scale-75" />
+				</a>
+			{:else}
+				<span> You're all set. Feel free to click around! </span>
+			{/if}
 		{/if}
+		<h2 class="h2">Welcome to Skeleton!</h2>
 
 		<!-- Animated Logo -->
 		<figure>
@@ -37,10 +47,6 @@
 				<a class="btn variant-filled" href="/sign-up">Create an account</a>
 				<a class="btn variant-filled" href="/sign-in">Sign in</a>
 			{:else}
-				{#if !user.emailVerified}
-					<a class="btn variant-filled" href="/email-verification">Please verify your account</a>
-				{/if}
-
 				<form method="POST" action="?/logout">
 					<button class="btn variant-filled">Logout</button>
 				</form>
