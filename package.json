@@ -53,11 +53,11 @@
 	"dependencies": {
 		"@lucia-auth/adapter-mysql": "^1.1.1",
 		"@lucia-auth/tokens": "^1.0.2",
-		"@planetscale/database": "^1.8.0",
 		"drizzle-orm": "^0.27.1",
 		"drizzle-zod": "^0.4.4",
 		"lucia-auth": "^1.8.0",
 		"lucide-svelte": "^0.260.0",
+		"mysql2": "^3.5.2",
 		"zod": "^3.21.4"
 	},
 	"commitlint": {

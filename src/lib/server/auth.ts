@@ -2,10 +2,10 @@ import { dev } from '$app/environment';
 
 import lucia from 'lucia-auth';
 import { sveltekit } from 'lucia-auth/middleware';
-import { planetscale } from '@lucia-auth/adapter-mysql';
+import { mysql2 } from '@lucia-auth/adapter-mysql';
 import { idToken } from '@lucia-auth/tokens';
 
-import { connection } from '$lib/server/db';
+import { connectionPool } from '$lib/server/db';
 
 /**
  * Resulting type defintion of `user` from Lucia
@@ -21,8 +21,7 @@ export type User = {
 export type LuciaAuth = typeof auth;
 
 export const auth = lucia({
-	// @ts-ignore
-	adapter: planetscale(connection),
+	adapter: mysql2(connectionPool),
 	env: dev ? 'DEV' : 'PROD',
 	middleware: sveltekit(),
 

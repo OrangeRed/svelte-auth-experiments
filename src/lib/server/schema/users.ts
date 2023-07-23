@@ -38,7 +38,9 @@ export const userSessionsTable = mysqlTable('auth_session', {
 	}).primaryKey(),
 	userId: varchar('user_id', {
 		length: USER_ID_SIZE
-	}),
+	})
+		.notNull()
+		.references(() => usersTable.id),
 	activeExpires: bigint('active_expires', {
 		mode: 'number'
 	}).notNull(),
@@ -53,7 +55,9 @@ export const userKeysTable = mysqlTable('auth_key', {
 	}).primaryKey(),
 	userId: varchar('user_id', {
 		length: USER_ID_SIZE
-	}).notNull(),
+	})
+		.notNull()
+		.references(() => usersTable.id),
 	primaryKey: boolean('primary_key').notNull(),
 	hashedPassword: varchar('hashed_password', {
 		length: 255
