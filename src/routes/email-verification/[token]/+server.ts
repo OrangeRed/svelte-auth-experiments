@@ -1,4 +1,6 @@
-// src/routes/email-verification/[token]/+server.ts
+import { error, redirect } from '@sveltejs/kit';
+import { LuciaTokenError } from '@lucia-auth/tokens';
+
 import { auth, emailVerificationToken } from '$lib/server/auth';
 
 import type { RequestHandler } from './$types';
@@ -7,23 +9,23 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 	try {
 		const { userId } = await emailVerificationToken.validate(params.token);
 
-		await auth.invalidateAllUserSessions(userId);
-		await auth.updateUserAttributes(userId, {
-			email_verified: true
-		});
+		await Promise.all([
+			auth.invalidateAllUserSessions(userId),
+			auth.updateUserAttributes(userId, {
+				email_verified: true
+			})
+		]);
 
 		const session = await auth.createSession(userId);
 		locals.auth.setSession(session);
+		emailVerificationToken.invalidate(params.token);
+	} catch (e) {
+		if (e instanceof LuciaTokenError && e.message === 'INVALID_TOKEN') {
+			throw redirect(302, '/');
+		}
 
-		return new Response(null, {
-			status: 302,
-			headers: {
-				Location: '/'
-			}
-		});
-	} catch (err) {
-		return new Response('Invalid email verification link', {
-			status: 400
-		});
+		throw error(500);
 	}
+
+	throw redirect(302, '/');
 };
