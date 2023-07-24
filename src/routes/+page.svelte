@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { ExternalLink } from 'lucide-svelte';
-
 	import type { PageData } from './$types';
-	import clsx from '$lib/utils/clsx';
 
 	export let data: PageData;
 	const { user, greeting } = data;
@@ -10,27 +7,27 @@
 	$: blurImage = !user || !user.emailVerified;
 </script>
 
-<main class="flex h-full w-full flex-col items-center justify-center space-y-5 text-center">
+<main class="flex h-full w-full flex-col items-center justify-center text-center">
 	{#if user}
-		<h2 class="h2">
+		<h2 class="h2 mb-12">
 			{greeting},
-			<span class="text-orange-400"> {user.firstName} {user.lastName}</span>
+			<span class="text-primary-400"> {user.firstName} {user.lastName}</span>
 		</h2>
 
 		{#if !user.emailVerified}
-			<h3 class="h3">
-				To view the secret image
-				<a class="underline decoration-orange-400 decoration-2" href="/email-verification">
-					verify your email address.
+			<h3 class="h3 mb-24">
+				What's the secret image? <br />
+				<a class="underline decoration-primary-400 decoration-2" href="/email-verification">
+					Finish verifying
 				</a>
+				to find out.
 			</h3>
 		{/if}
 	{:else}
-		<h3 class="h3">
-			To view the secret image
-			<a href="/sign-in" class="underline decoration-orange-400 decoration-2">
-				sign into your account.
-			</a>
+		<h3 class="h3 mb-24">
+			What's the secret image? <br />
+			<a href="/sign-in" class="underline decoration-primary-400 decoration-2"> Sign in </a>
+			to find out.
 		</h3>
 	{/if}
 
@@ -41,7 +38,7 @@
 		<section class="img-bg" />
 		<svg
 			class={`
-					-scale-x-[100%] fill-token
+					mb-24 -scale-x-[100%] fill-token
 					${blurImage ? 'blur-3xl' : ''}
 				`}
 			xmlns="http://www.w3.org/2000/svg"
@@ -56,8 +53,8 @@
 
 	{#if user?.emailVerified}
 		<h3 class="wobble h3">
-			Spooky, scary skeletons <br />
-			Send shivers down your spine
+			<span class="text-primary-400">Congratulations</span>, here's a <br />
+			spooky, scary skeleton
 		</h3>
 	{/if}
 </main>

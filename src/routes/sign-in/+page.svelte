@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
-	import { focusTrap } from '@skeletonlabs/skeleton';
+	import { ConicGradient } from '@skeletonlabs/skeleton';
 	import { AlertCircleIcon } from 'lucide-svelte';
 
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	const { form, message, errors, enhance } = superForm(data.form, {
+	const { form, message, errors, enhance, submitting } = superForm(data.form, {
 		defaultValidator: 'clear',
 		onUpdate: ({ form }) => {
 			form.data.password = '';
@@ -17,48 +17,75 @@
 <main class="flex h-full w-full items-center justify-center">
 	<section class="img-bg h-[32rem] w-[32rem]" />
 	<form
-		class="w-96 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
+		class="w-[32rem] space-y-6 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
 		method="POST"
-		use:focusTrap={true}
 		use:enhance
 	>
-		<h2 class="mb-8 text-center text-2xl">Sign In</h2>
+		<h2 class="h2 text-center underline decoration-primary-400">Sign in</h2>
 
-		<label class="py-2" for="email">Email</label>
-		<div class="relative flex flex-col">
+		<p class="text-center font-semibold text-red-500">{$message ?? ''}</p>
+
+		<label class="label relative">
+			<span class="sr-only">Email</span>
 			<input
-				class="input"
+				id="email"
 				name="email"
 				type="email"
-				placeholder="john.smith@example.com"
-				bind:value={$form.email}
-			/>
-
-			{#if $errors.email}
-				<AlertCircleIcon class="absolute right-0 mx-3 mt-[0.6rem] text-red-500" />
-			{/if}
-		</div>
-		<small class="text-red-500">{$errors.email?.[0] ?? ''}</small>
-
-		<label class="py-2" for="password">Password</label>
-		<div class="relative flex flex-col">
-			<input
 				class="input"
+				placeholder="Email Address"
+				autocomplete="email"
+				data-invalid={$errors.email}
+				bind:value={$form.email}
+				class:input-error={$errors.email}
+			/>
+			{#if $errors.email}
+				<AlertCircleIcon class="absolute bottom-[2.2rem] right-0 mx-3 text-red-500" />
+				<small class="text-red-500">{$errors.email?.[0] ?? ''}</small>
+			{/if}
+		</label>
+
+		<label class="label relative">
+			<span class="sr-only">Password</span>
+			<input
+				id="password"
 				name="password"
 				type="password"
+				class="input"
 				placeholder="Password"
+				autocomplete="current-password"
+				data-invalid={$errors.password}
 				bind:value={$form.password}
+				class:input-error={$errors.password}
 			/>
 			{#if $errors.password}
-				<AlertCircleIcon class="absolute right-0 mx-3 mt-[0.6rem] text-red-500" />
+				<AlertCircleIcon class="absolute bottom-[2.2rem] right-0 mx-3 text-red-500" />
+				<small class="text-red-500">{$errors.password?.[0] ?? ''}</small>
 			{/if}
+		</label>
+
+		<div class="flex justify-center text-sm">
+			<!-- TODO password reset -->
+			<a href="/" class="text-secondary-300 focus:underline">Forgot Password?</a>
 		</div>
-		<small class="text-red-500">{$errors.password?.[0] ?? ''}</small>
 
-		<p class="pt-4 text-center text-red-500">{$message ?? ''}</p>
+		<button type="submit" class="btn variant-filled-primary w-full">
+			{#if $submitting}
+				<ConicGradient
+					stops={[
+						{ color: 'transparent', start: 0, end: 25 },
+						{ color: 'rgb(var(--color-primary-900))', start: 75, end: 100 }
+					]}
+					spin
+					width="w-6"
+				/>
+			{:else}
+				Sign in
+			{/if}
+		</button>
 
-		<div class="flex w-full justify-center p-2">
-			<button type="submit" class="btn variant-filled-success">Submit</button>
+		<div class="flex justify-center text-sm">
+			<span class="opacity-60"> Don't have an account? &nbsp; </span>
+			<a href="/sign-up" class="text-secondary-300 focus:underline">Sign up</a>
 		</div>
 	</form>
 </main>

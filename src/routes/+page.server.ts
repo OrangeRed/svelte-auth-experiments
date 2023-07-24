@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	logout: async ({ locals }) => {
 		if (locals.auth.storedSessionId) {
-			await auth.invalidateSession(locals.auth.storedSessionId);
+			auth.invalidateSession(locals.auth.storedSessionId);
 			locals.auth.setSession(null);
 		}
 

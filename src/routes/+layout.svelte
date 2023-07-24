@@ -17,31 +17,39 @@
 <AppShell>
 	<!-- Header -->
 	<svelte:fragment slot="header">
-		<AppBar>
+		<AppBar background="bg-transparent">
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">Svelte Auth Experiment</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				{#if !data.user}
-					<a class="btn variant-filled" href="/sign-in">Login</a>
-				{:else}
-					<form method="POST" action="?/logout">
-						<button type="submit" class="btn variant-filled">Logout</button>
-					</form>
+				{#if $page.route.id === '/'}
+					{#if !data.user}
+						<a class="btn variant-outline-primary uppercase tracking-widest" href="/sign-in">
+							Sign in
+						</a>
+						<a class="btn variant-ghost-primary uppercase tracking-widest" href="/sign-up">
+							Sign up
+						</a>
+					{:else}
+						<form method="POST" action="?/logout">
+							<button type="submit" class="btn variant-outline-primary">Logout</button>
+						</form>
+					{/if}
 				{/if}
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 
 	<!-- Main Content -->
-	<main class="container mx-auto flex h-full">
+	<main class="container mx-auto h-full">
 		<slot />
 	</main>
 
 	<!-- Footer -->
 	<svelte:fragment slot="footer">
-		<div class="m-8 flex flex-row justify-center">
+		<div class="flex h-full w-full flex-row justify-center bg-transparent py-8">
 			<a href="/">Home</a>
+			<!-- TODO Profile href -->
 		</div>
 	</svelte:fragment>
 </AppShell>
