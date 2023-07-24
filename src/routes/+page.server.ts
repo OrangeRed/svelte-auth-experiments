@@ -6,13 +6,8 @@ import greetings from '$lib/greetings.json';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const getUser = async () => {
-		const { user } = await locals.auth.validateUser();
-		return user;
-	};
-
 	return {
-		user: getUser(),
+		user: locals.user,
 		greeting: greetings.sort(() => Math.random() - Math.random())[0] ?? 'Hey'
 	};
 };

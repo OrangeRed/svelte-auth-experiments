@@ -45,11 +45,9 @@ const signUpSchema = z
 	);
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const { user } = await locals.auth.validateUser();
-
-	if (user && !user.emailVerified) {
+	if (locals.user && !locals.user.emailVerified) {
 		throw redirect(302, '/email-verification');
-	} else if (user && user.emailVerified) {
+	} else if (locals.user && locals.user.emailVerified) {
 		throw redirect(302, '/');
 	}
 

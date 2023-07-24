@@ -1,5 +1,5 @@
 import '@total-typescript/ts-reset';
-import type { AuthRequest } from 'lucia-auth';
+import type { AuthRequest, User } from 'lucia-auth';
 import type { LuciaAuth } from '$lib/server/auth';
 import type { AuthUser } from '$lib/server/schema/users';
 
@@ -10,6 +10,7 @@ declare global {
 	declare namespace App {
 		interface Locals {
 			auth: AuthRequest;
+			user: User | null;
 		}
 		// interface PageData {}
 		// interface Error {}
