@@ -1,24 +1,17 @@
-import { z } from 'zod';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import { LuciaError } from 'lucia-auth';
+import { auth } from '$lib/server/auth';
+import { userSchema } from '$lib/validators';
 
 import type { Actions, PageServerLoad } from './$types';
-import { auth } from '$lib/server/auth';
 
-const signInSchema = z.object({
-	email: z
-		.string()
-		.email('Please enter a valid email address')
-		.min(1, 'Email is required')
-		.max(255),
-	password: z
-		.string()
-		.trim()
-		.min(1, 'Password is required')
-		.min(8, 'Password must be at least 8 characters')
-		.max(255)
-});
+const signInSchema = userSchema
+	.pick({
+		email: true,
+		password: true
+	})
+	.required();
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user && !locals.user.emailVerified) {

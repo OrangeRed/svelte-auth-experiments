@@ -1,40 +1,15 @@
-import { z } from 'zod';
 import { LuciaError } from 'lucia-auth';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
 
 import { auth, emailVerificationToken } from '$lib/server/auth';
 import { sendEmailVerificationLink } from '$lib/server/email';
-import { userSchema, type AuthUser } from '$lib/server/schema/users';
+import { usersTableSchema, type AuthUser } from '$lib/server/schema/users';
+import { userSchema } from '$lib/validators';
 
 import type { Actions, PageServerLoad } from './$types';
 
-const signUpSchema = z
-	.object({
-		first_name: z
-			.string()
-			.trim()
-			.min(1, 'First name is required')
-			.min(3, 'Must be 3 characters or more')
-			.max(15, 'Must be 15 characters or less'),
-		last_name: z
-			.string()
-			.trim()
-			.min(1, 'Last name is required')
-			.max(20, 'Must be 20 characters or less'),
-		email: z
-			.string()
-			.email('Please enter a valid email address')
-			.min(1, 'Email is required')
-			.max(255),
-		password: z
-			.string()
-			.trim()
-			.min(1, 'Password is required')
-			.min(8, 'Password must be at least 8 characters')
-			.max(255),
-		confirm_password: z.string().trim().min(1, 'Password is required').max(255)
-	})
+const signUpSchema = userSchema
 	.required()
 	.refine(
 		(formData) => formData.confirm_password && formData.password === formData.confirm_password,
@@ -72,7 +47,7 @@ export const actions: Actions = {
 					password: form.data.password // hashed by Lucia
 				},
 				// Ensure form.data can be inserted safely into usersTable
-				attributes: userSchema.parse(form.data satisfies AuthUser)
+				attributes: usersTableSchema.parse(form.data satisfies AuthUser)
 			});
 
 			const [session, token] = await Promise.all([

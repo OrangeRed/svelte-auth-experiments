@@ -8,7 +8,7 @@ const USER_ID_SIZE = `user-${crypto.randomUUID()}`.length;
 /**
  * Type definition of `auth_user` entries
  */
-export type AuthUser = z.infer<typeof userSchema>;
+export type AuthUser = z.infer<typeof usersTableSchema>;
 
 export const usersTable = mysqlTable('auth_user', {
 	id: varchar('id', {
@@ -30,7 +30,7 @@ export const usersTable = mysqlTable('auth_user', {
  * Zod validator for inserting into `auth_user` table.
  * * `id` is generated automatically by Lucia so don't do it manually.
  */
-export const userSchema = createInsertSchema(usersTable).omit({ id: true });
+export const usersTableSchema = createInsertSchema(usersTable).omit({ id: true });
 
 export const userSessionsTable = mysqlTable('auth_session', {
 	id: varchar('id', {
