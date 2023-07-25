@@ -6,7 +6,7 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { SignInSchema } from '$routes/sign-in/+page.server';
 
-	export let data: SuperValidated<SignInSchema>;
+	export let data: SuperValidated<SignInSchema, FormMessage>;
 
 	const { form, message, errors, enhance, delayed } = superForm(data, {
 		defaultValidator: 'clear',
@@ -24,7 +24,9 @@
 >
 	<h2 class="h2 text-center underline decoration-primary-400">Sign in</h2>
 
-	<p class="text-center font-semibold text-red-500">{$message ?? ''}</p>
+	{#if $message?.status === 'error'}
+		<p class="text-center font-semibold text-red-500">{$message.content}</p>
+	{/if}
 
 	<label class="label relative">
 		<span class="sr-only">Email</span>

@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, signInSchema);
+		const form = await superValidate<typeof signInSchema, FormMessage>(event, signInSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -43,7 +43,7 @@ export const actions: Actions = {
 				(e.message === 'AUTH_INVALID_KEY_ID' || e.message === 'AUTH_INVALID_PASSWORD')
 			) {
 				// user does not exist or invalid password
-				return message(form, 'Incorrect email or password');
+				return message(form, { status: 'error', content: 'Incorrect email or password' });
 			}
 
 			throw error(500);

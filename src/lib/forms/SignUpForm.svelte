@@ -25,7 +25,7 @@
 	<h2 class="h2 text-center underline decoration-primary-400">Sign up</h2>
 
 	{#if $message?.status === 'error'}
-		<p class="text-center font-semibold text-red-500">{$message ?? ''}</p>
+		<p class="text-center font-semibold text-red-500">{$message.content}</p>
 	{/if}
 
 	<label class="label relative">
