@@ -5,36 +5,51 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
-	import { AppBar, AppShell } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, Avatar, Modal } from '@skeletonlabs/skeleton';
+	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
 
-	import { page } from '$app/stores';
-
 	export let data: PageData;
+
+	let initials: string;
+	$: if (data.user) {
+		initials = data.user.firstName.slice(0, 1) + data.user.lastName.slice(0, 1);
+	}
 </script>
+
+<Modal />
 
 <AppShell>
 	<!-- Header -->
 	<svelte:fragment slot="header">
 		<AppBar background="bg-transparent">
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Svelte Auth Experiment</strong>
+				<a href="/" class="text-xl uppercase"><strong>Svelte Auth Experiment</strong></a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				{#if $page.route.id === '/'}
-					{#if !data.user}
-						<a class="btn variant-outline-primary uppercase tracking-widest" href="/sign-in">
-							Sign in
-						</a>
-						<a class="btn variant-ghost-primary uppercase tracking-widest" href="/sign-up">
-							Sign up
-						</a>
-					{:else}
-						<form method="POST" action="?/logout">
-							<button type="submit" class="btn variant-outline-primary">Logout</button>
-						</form>
-					{/if}
+				{#if !data.user && $page.route.id === '/'}
+					<a class="btn variant-outline-primary uppercase tracking-widest" href="/sign-in">
+						Sign in
+					</a>
+					<a class="btn variant-ghost-primary uppercase tracking-widest" href="/sign-up">
+						Sign up
+					</a>
+				{/if}
+
+				{#if data.user}
+					<form method="POST" action="/?/logout">
+						<button type="submit" class="btn variant-outline-primary uppercase tracking-widest">
+							Logout
+						</button>
+					</form>
+					<a href="/profile" class="rounded-full">
+						<Avatar
+							class="variant-ghost-primary h-11 w-fit rounded-full"
+							background="bg-transparent"
+							{initials}
+						/>
+					</a>
 				{/if}
 			</svelte:fragment>
 		</AppBar>
@@ -47,9 +62,8 @@
 
 	<!-- Footer -->
 	<svelte:fragment slot="footer">
-		<div class="flex h-full w-full flex-row justify-center bg-transparent py-8">
-			<a href="/">Home</a>
-			<!-- TODO Profile href -->
+		<div class="flex h-full w-full flex-row justify-center bg-transparent py-4">
+			<a href="/" class="px-4 hover:underline">Home</a>
 		</div>
 	</svelte:fragment>
 </AppShell>

@@ -11,7 +11,7 @@
 	{#if user}
 		<h2 class="h2 mb-12">
 			{greeting},
-			<span class="text-primary-400"> {user.firstName} {user.lastName}</span>
+			<span class="capitalize text-primary-400">{user.firstName} {user.lastName}</span>
 		</h2>
 
 		{#if !user.emailVerified}
