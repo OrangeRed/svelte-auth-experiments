@@ -20,9 +20,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, '/');
 	}
 
-	return {
-		form: superValidate(signInSchema)
-	};
+	return { form: superValidate(signInSchema) };
 };
 
 export const actions: Actions = {
@@ -47,6 +45,11 @@ export const actions: Actions = {
 			}
 
 			throw error(500);
+		}
+
+		const redirectTo = event.url.searchParams.get('redirectTo');
+		if (redirectTo) {
+			throw redirect(302, `/${redirectTo.slice(1)}`);
 		}
 
 		throw redirect(302, '/');
