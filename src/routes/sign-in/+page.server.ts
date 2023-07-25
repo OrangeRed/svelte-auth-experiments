@@ -6,6 +6,8 @@ import { userSchema } from '$lib/validators';
 
 import type { Actions, PageServerLoad } from './$types';
 
+export type SignInSchema = typeof signInSchema;
+
 const signInSchema = userSchema
 	.pick({
 		email: true,
