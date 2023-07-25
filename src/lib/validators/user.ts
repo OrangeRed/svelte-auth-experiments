@@ -5,13 +5,13 @@ const userSchema = z.object({
 		.string()
 		.trim()
 		.min(1, 'First name is required')
-		.min(3, 'Must be 3 characters or more')
-		.max(15, 'Must be 15 characters or less'),
+		.min(3, 'Must be at least 3 characters')
+		.max(15, 'Must be less than 16 characters'),
 	last_name: z
 		.string()
 		.trim()
 		.min(1, 'Last name is required')
-		.max(20, 'Must be 20 characters or less'),
+		.max(20, 'Must be less than 20 characters'),
 	email: z
 		.string()
 		.email('Please enter a valid email address')
@@ -27,3 +27,5 @@ const userSchema = z.object({
 });
 
 export default userSchema;
+
+export type UserSchema = typeof userSchema;

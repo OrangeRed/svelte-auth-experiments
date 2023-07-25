@@ -6,9 +6,9 @@ import { createInsertSchema } from 'drizzle-zod';
 const USER_ID_SIZE = `user-${crypto.randomUUID()}`.length;
 
 /**
- * Type definition of `auth_user` entries
+ * Type definition of the database user
  */
-export type AuthUser = z.infer<typeof usersTableSchema>;
+export type DatabaseUser = z.infer<typeof usersTableSchema>;
 
 export const usersTable = mysqlTable('auth_user', {
 	id: varchar('id', {
@@ -27,7 +27,7 @@ export const usersTable = mysqlTable('auth_user', {
 });
 
 /**
- * Zod validator for inserting into `auth_user` table.
+ * Zod validator for inserting into the `auth_user` table.
  * * `id` is generated automatically by Lucia so don't do it manually.
  */
 export const usersTableSchema = createInsertSchema(usersTable).omit({ id: true });

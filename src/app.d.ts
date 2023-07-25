@@ -1,7 +1,7 @@
 import '@total-typescript/ts-reset';
 import type { AuthRequest, User } from 'lucia-auth';
 import type { LuciaAuth } from '$lib/server/auth';
-import type { AuthUser } from '$lib/server/schema/users';
+import type { DatabaseUser } from '$lib/server/schema/users';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -22,6 +22,6 @@ declare global {
 declare global {
 	namespace Lucia {
 		type Auth = LuciaAuth;
-		type UserAttributes = AuthUser;
+		type UserAttributes = DatabaseUser;
 	}
 }
