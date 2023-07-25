@@ -33,6 +33,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 	};
 };
 
+const checkUserKeyExists = async (providerId: string, providerUserId: string) => {
+	try {
+		await auth.getKey(providerId, providerUserId); // throws if the key doesn't exist
+	} catch {
+		return null;
+	}
+
+	// throw if the key exists instead
+	throw new LuciaError('AUTH_DUPLICATE_KEY_ID');
+};
+
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate<typeof signUpSchema, FormMessage>(event, signUpSchema);
@@ -42,14 +53,21 @@ export const actions: Actions = {
 		}
 
 		try {
+			// auth.createUser({...})` is more than happy to insert a duplicate user into the auth_user table
+			// this check makes sure the user's key doesn't exist before inserting a new user into the database
+			await checkUserKeyExists('email', form.data.email);
+
 			const { userId } = await auth.createUser({
-				primaryKey: {
-					providerId: 'email', // auth method
-					providerUserId: form.data.email, // unique id when using "email" auth method
-					password: form.data.password // hashed by Lucia
-				},
+				primaryKey: null, // Primary keys can't be deleted
 				// Ensure form.data can be inserted safely into usersTable
 				attributes: usersTableSchema.parse(form.data satisfies DatabaseUser)
+			});
+
+			await auth.createKey(userId, {
+				type: 'persistent',
+				providerId: 'email',
+				providerUserId: form.data.email,
+				password: form.data.password
 			});
 
 			const [session, token] = await Promise.all([
