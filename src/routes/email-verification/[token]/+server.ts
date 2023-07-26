@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 
 		const session = await auth.createSession(userId);
 		locals.auth.setSession(session);
-		emailVerificationToken.invalidate(params.token);
+		emailVerificationToken.invalidateAllUserTokens(userId);
 	} catch (e) {
 		if (e instanceof LuciaTokenError && e.message === 'INVALID_TOKEN') {
 			throw redirect(302, '/');

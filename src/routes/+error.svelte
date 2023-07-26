@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { modalStore } from '@skeletonlabs/skeleton';
+
+	modalStore.close();
 </script>
 
 <div class="flex h-full flex-col items-center justify-center">

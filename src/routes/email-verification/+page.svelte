@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { ConicGradient } from '@skeletonlabs/skeleton';
+	import { ConicGradient, modalStore } from '@skeletonlabs/skeleton';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
+
+	modalStore.close();
 
 	let submitting = false;
 	const submitForm: SubmitFunction = () => {
