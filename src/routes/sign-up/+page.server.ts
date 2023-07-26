@@ -1,6 +1,6 @@
 import { LuciaError } from 'lucia-auth';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { userSchema } from '$lib/validators';
 import { auth, emailVerificationToken } from '$lib/server/auth';
@@ -46,7 +46,7 @@ const checkUserKeyExists = async (providerId: string, providerUserId: string) =>
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate<typeof signUpSchema, FormMessage>(event, signUpSchema);
+		const form = await superValidate(event, signUpSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -79,7 +79,7 @@ export const actions: Actions = {
 			sendEmailVerificationLink(token.toString());
 		} catch (e) {
 			if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
-				return message(form, { status: 'error', content: 'User already exists' });
+				return setError(form, 'User already exists');
 			}
 
 			throw error(500);

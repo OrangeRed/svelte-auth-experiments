@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 import { LuciaError } from 'lucia-auth';
 import { auth } from '$lib/server/auth';
 import { userSchema } from '$lib/validators';
@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate<typeof signInSchema, FormMessage>(event, signInSchema);
+		const form = await superValidate(event, signInSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -43,7 +43,7 @@ export const actions: Actions = {
 				(e.message === 'AUTH_INVALID_KEY_ID' || e.message === 'AUTH_INVALID_PASSWORD')
 			) {
 				// user does not exist or invalid password
-				return message(form, { status: 'error', content: 'Incorrect email or password' });
+				return setError(form, 'Incorrect email or password');
 			}
 
 			throw error(500);

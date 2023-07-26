@@ -6,9 +6,9 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { SignUpSchema } from '$routes/sign-up/+page.server';
 
-	export let data: SuperValidated<SignUpSchema, FormMessage>;
+	export let data: SuperValidated<SignUpSchema>;
 
-	const { form, message, errors, enhance, submitting } = superForm(data, {
+	const { form, errors, enhance, delayed } = superForm(data, {
 		defaultValidator: 'clear',
 		onError: 'apply',
 		onUpdate: ({ form }) => {
@@ -24,8 +24,8 @@
 >
 	<h2 class="h2 text-center underline decoration-primary-400">Sign up</h2>
 
-	{#if $message?.status === 'error'}
-		<p class="text-center font-semibold text-red-500">{$message.content}</p>
+	{#if $errors._errors}
+		<p class="text-center font-semibold text-red-500">{$errors._errors[0]}</p>
 	{/if}
 
 	<label class="label relative">
@@ -122,7 +122,7 @@
 	</label>
 
 	<button type="submit" class="btn variant-filled-primary w-full">
-		{#if $submitting}
+		{#if $delayed}
 			<ConicGradient
 				stops={[
 					{ color: 'transparent', start: 0, end: 25 },
