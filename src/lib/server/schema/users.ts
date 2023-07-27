@@ -66,33 +66,3 @@ export const userKeysTable = mysqlTable('auth_key', {
 		mode: 'number'
 	})
 });
-
-// type VerificationTokenTable = {
-// 	id: string;
-// 	user_id: string;
-// 	expires: ColumnType<bigint, number>;
-// };
-
-export const emailVerificationTokenTable = mysqlTable('email_verification_token_table', {
-	id: varchar('id', {
-		length: 255
-	}).primaryKey(),
-	userId: varchar('user_id', {
-		length: 15
-	}).notNull(),
-	expires: bigint('expires', {
-		mode: 'number'
-	})
-});
-
-export const passwordResetTokenTable = mysqlTable('password_reset_token_table', {
-	id: varchar('id', {
-		length: 255
-	}).primaryKey(),
-	userId: varchar('user_id', {
-		length: 15
-	}).notNull(),
-	expires: bigint('expires', {
-		mode: 'number'
-	})
-});

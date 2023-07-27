@@ -45,3 +45,7 @@ export const auth = lucia({
 export const emailVerificationToken = idToken(auth, 'email-verification', {
 	expiresIn: 60 * 60 // expiration in 1 hour,
 });
+
+export const passwordResetToken = idToken(auth, 'password-reset', {
+	expiresIn: 60 * 60 // expiration in 1 hour,
+});
