@@ -2,7 +2,7 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { LuciaError } from 'lucia-auth';
 
-import { auth, emailVerificationToken } from '$lib/server/auth';
+import { auth, emailVerificationToken, passwordResetToken } from '$lib/server/auth';
 import { handleLogInRedirect } from '$lib/utils/handleLoginRedirect';
 import { sendEmailVerificationLink } from '$lib/server/email';
 import { userSchema } from '$lib/validators';
@@ -17,15 +17,26 @@ const nameChangeSchema = userSchema.pick({
 	last_name: true
 });
 
-export type EmailChangeSchema = typeof emailChangeScehma;
+export type EmailChangeSchema = typeof emailChangeSchema;
 
-const emailChangeScehma = userSchema
+const emailChangeSchema = userSchema
 	.pick({
-		email: true,
 		confirm_password: true
 	})
 	.extend({
 		new_email: userSchema.shape.email
+	});
+
+export type ChangePasswordSchema = typeof changePasswordSchema;
+
+const changePasswordSchema = userSchema
+	.pick({
+		password: true,
+		confirm_password: true
+	})
+	.refine((formData) => formData.password === formData.confirm_password, {
+		message: "Passwords don't match",
+		path: ['confirm_password']
 	});
 
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -46,12 +57,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 };
 
 export const actions: Actions = {
-	changeEmail: async (event) => {
-		if (!event.locals.user) {
-			throw error(500);
+	changeEmail: async ({ locals, request, url }) => {
+		if (!locals.user) {
+			throw redirect(302, handleLogInRedirect(url));
 		}
 
-		const form = await superValidate(event, emailChangeScehma);
+		const form = await superValidate(request, emailChangeSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -59,8 +70,8 @@ export const actions: Actions = {
 
 		try {
 			// Throws if the password is wrong
-			await auth.useKey('email', event.locals.user.email, form.data.confirm_password);
-			await auth.deleteKey('email', event.locals.user.email);
+			await auth.useKey('email', locals.user.email, form.data.confirm_password);
+			await auth.deleteKey('email', locals.user.email);
 
 			const newAttributes = {
 				email: form.data.new_email,
@@ -68,7 +79,7 @@ export const actions: Actions = {
 			} satisfies Partial<DatabaseUser>;
 
 			const { email: newEmail, userId } = await auth.updateUserAttributes(
-				event.locals.user.userId,
+				locals.user.userId,
 				newAttributes
 			);
 
@@ -97,16 +108,16 @@ export const actions: Actions = {
 
 		throw redirect(302, '/verify-email');
 	},
-	changeName: async (event) => {
-		if (!event.locals.user) {
-			throw error(500);
+	changeName: async ({ locals, request, url }) => {
+		if (!locals.user) {
+			throw redirect(302, handleLogInRedirect(url));
 		}
 
-		const form = await superValidate(event, nameChangeSchema);
+		const form = await superValidate(request, nameChangeSchema);
 
 		if (!form.valid) {
-			form.data.first_name = event.locals.user.firstName;
-			form.data.last_name = event.locals.user.lastName;
+			form.data.first_name = locals.user.firstName;
+			form.data.last_name = locals.user.lastName;
 
 			return fail(400, { form });
 		}
@@ -117,12 +128,41 @@ export const actions: Actions = {
 				last_name: form.data.last_name
 			} satisfies Partial<DatabaseUser>;
 
-			await auth.updateUserAttributes(event.locals.user.userId, newAttributes);
+			await auth.updateUserAttributes(locals.user.userId, newAttributes);
 		} catch (e) {
 			console.log(e);
 			throw error(500);
 		}
 
 		return message(form, 'Profile has been successfully updated');
+	},
+	changePassword: async ({ locals, request, url }) => {
+		if (!locals.user) {
+			throw redirect(302, handleLogInRedirect(url));
+		}
+
+		const form = await superValidate(request, changePasswordSchema);
+
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		try {
+			await auth.updateKeyPassword('email', locals.user.email, form.data.password);
+
+			await Promise.all([
+				locals.auth.setSession(null),
+				auth.invalidateAllUserSessions(locals.user.userId),
+				passwordResetToken.invalidateAllUserTokens(locals.user.userId)
+			]);
+		} catch (e) {
+			console.log(e);
+			throw error(500);
+		}
+
+		throw redirect(
+			302,
+			handleLogInRedirect(url, 'Your password has been changed, please sign in again.')
+		);
 	}
 };

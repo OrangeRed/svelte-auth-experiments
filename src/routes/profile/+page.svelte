@@ -1,29 +1,14 @@
 <script lang="ts">
-	import NameChangeForm from '$lib/forms/NameChangeForm.svelte';
 	import EmailChangeForm from '$lib/forms/EmailChangeForm.svelte';
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import NameChangeForm from '$lib/forms/NameChangeForm.svelte';
+	import PasswordChangeForm from '$lib/forms/PasswordChangeForm.svelte';
+	import { modalStore } from '@skeletonlabs/skeleton';
 	import { PencilIcon } from 'lucide-svelte';
 
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 	$: user = data.user;
-
-	const nameChangeModal: ModalSettings = {
-		type: 'component',
-		component: {
-			ref: NameChangeForm,
-			props: { data: data.form }
-		}
-	};
-
-	const emailChangeModal: ModalSettings = {
-		type: 'component',
-		component: {
-			ref: EmailChangeForm,
-			props: { data: data.form }
-		}
-	};
 </script>
 
 <main class="flex h-full w-full items-center justify-center">
@@ -40,7 +25,11 @@
 			<div class="flex justify-end">
 				<button
 					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
-					on:click={() => modalStore.trigger(nameChangeModal)}
+					on:click={() =>
+						modalStore.trigger({
+							type: 'component',
+							component: { ref: NameChangeForm, props: { data: data.form } }
+						})}
 				>
 					<PencilIcon class="h-4" />
 					Edit
@@ -54,7 +43,11 @@
 			<div class="flex justify-end">
 				<button
 					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
-					on:click={() => modalStore.trigger(emailChangeModal)}
+					on:click={() =>
+						modalStore.trigger({
+							type: 'component',
+							component: { ref: EmailChangeForm, props: { data: data.form } }
+						})}
 				>
 					<PencilIcon class="h-4" />
 					Edit
@@ -66,13 +59,17 @@
 			<span class="opacity-70">Password</span>
 			<span class="col-span-2 mx-2 tracking-wide">********</span>
 			<div class="flex justify-end">
-				<a
-					href="/change-password"
+				<button
 					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
+					on:click={() =>
+						modalStore.trigger({
+							type: 'component',
+							component: { ref: PasswordChangeForm, props: { data: data.form, user: data.user } }
+						})}
 				>
 					<PencilIcon class="h-4" />
 					Edit
-				</a>
+				</button>
 			</div>
 		</div>
 	</div>

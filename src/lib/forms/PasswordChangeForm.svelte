@@ -1,12 +1,14 @@
 <script lang="ts">
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { AlertCircleIcon } from 'lucide-svelte';
+	import { AlertCircleIcon, XIcon } from 'lucide-svelte';
 	import { modalStore } from '@skeletonlabs/skeleton';
 
+	import type { User } from 'lucia-auth';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import type { ChangePasswordSchema } from '$routes/change-password/+page.server';
+	import type { ChangePasswordSchema } from '$routes/profile/+page.server';
 
+	export let user: User | null = null;
 	export let data: SuperValidated<ChangePasswordSchema>;
 
 	const { form, errors, enhance, delayed } = superForm(data, {
@@ -75,4 +77,14 @@
 			Change password
 		{/if}
 	</button>
+
+	{#if user}
+		<button
+			type="reset"
+			class="btn absolute left-0 top-0 m-6 rounded-none p-0"
+			on:click={() => modalStore.close()}
+		>
+			<XIcon />
+		</button>
+	{/if}
 </form>
