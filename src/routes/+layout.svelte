@@ -5,8 +5,9 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { AppBar, AppShell, Avatar, Modal } from '@skeletonlabs/skeleton';
-	import { page } from '$app/stores';
+	import { page, navigating } from '$app/stores';
 
 	import type { PageData } from './$types';
 
@@ -56,8 +57,14 @@
 	</svelte:fragment>
 
 	<!-- Main Content -->
-	<main class="container mx-auto h-full">
-		<slot />
+	<main class="h-full">
+		{#if $navigating}
+			<div class="flex h-full items-center justify-center">
+				<LoadingSpinner />
+			</div>
+		{:else}
+			<slot />
+		{/if}
 	</main>
 
 	<!-- Footer -->

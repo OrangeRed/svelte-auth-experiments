@@ -1,10 +1,8 @@
 <script lang="ts">
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { enhance } from '$app/forms';
-	import { ConicGradient, modalStore } from '@skeletonlabs/skeleton';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
-
-	modalStore.close();
 
 	let submitting = false;
 	const submitForm: SubmitFunction = () => {
@@ -30,14 +28,7 @@
 		<h2 class="h2 text-center underline decoration-primary-400">Email verification</h2>
 
 		{#if submitting}
-			<ConicGradient
-				stops={[
-					{ color: 'transparent', start: 0, end: 25 },
-					{ color: 'rgb(var(--color-primary-900))', start: 75, end: 100 }
-				]}
-				spin
-				width="w-6"
-			/>
+			<LoadingSpinner />
 		{:else}
 			<p class="text-center">
 				A verification email was sent to your inbox. <br /> (i.e. console)
