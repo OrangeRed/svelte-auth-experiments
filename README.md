@@ -1,6 +1,6 @@
 # Sveltekit Auth Experiments
 
-Just a repo containing some experiments with authentication inside Sveltekit
+A repo containing my experiments with authentication inside Sveltekit
 
 ## Setup
 
