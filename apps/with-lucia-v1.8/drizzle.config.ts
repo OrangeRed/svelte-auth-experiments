@@ -12,7 +12,6 @@ export default {
 	out: './drizzle',
 	driver: 'mysql2',
 	dbCredentials: {
-		// connectionString: process.env.PLANETSCALE_URL!
 		user: process.env.DATABASE_USER!,
 		password: process.env.DATABASE_PASSWORD!,
 		database: process.env.DATABASE!,

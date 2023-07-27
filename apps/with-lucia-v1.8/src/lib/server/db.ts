@@ -1,15 +1,3 @@
-/**
- * For Planetscale use this config instead
- */
-// import { connect } from '@planetscale/database';
-// import { drizzle } from 'drizzle-orm/planetscale-serverless';
-
-// import { PLANETSCALE_URL } from '$env/static/private';
-
-// export const connection = connect({
-// 	url: PLANETSCALE_URL
-// });
-
 import mysql from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
 
