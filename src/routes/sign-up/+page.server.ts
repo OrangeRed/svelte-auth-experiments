@@ -13,13 +13,10 @@ export type SignUpSchema = typeof signUpSchema;
 
 const signUpSchema = userSchema
 	.required()
-	.refine(
-		(formData) => formData.confirm_password && formData.password === formData.confirm_password,
-		{
-			message: "Passwords don't match",
-			path: ['confirm_password']
-		}
-	);
+	.refine((formData) => formData.password === formData.confirm_password, {
+		message: "Passwords don't match",
+		path: ['confirm_password']
+	});
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user && !locals.user.emailVerified) {

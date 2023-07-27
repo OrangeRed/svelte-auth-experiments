@@ -39,7 +39,7 @@
 			<span class="col-span-2 mx-2 capitalize">{user.firstName} {user.lastName}</span>
 			<div class="flex justify-end">
 				<button
-					class="flex items-center text-secondary-400 underline decoration-secondary-400 duration-100 hover:opacity-70"
+					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
 					on:click={() => modalStore.trigger(nameChangeModal)}
 				>
 					<PencilIcon class="h-4" />
@@ -53,7 +53,7 @@
 			<span class="col-span-2 mx-2">{user.email}</span>
 			<div class="flex justify-end">
 				<button
-					class="flex items-center text-secondary-400 underline decoration-secondary-400 duration-100 hover:opacity-70"
+					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
 					on:click={() => modalStore.trigger(emailChangeModal)}
 				>
 					<PencilIcon class="h-4" />
@@ -62,17 +62,17 @@
 			</div>
 		</div>
 
-		<!-- TODO Password change modal -->
 		<div class="grid grid-cols-4">
 			<span class="opacity-70">Password</span>
 			<span class="col-span-2 mx-2 tracking-wide">********</span>
 			<div class="flex justify-end">
-				<button
-					class="flex items-center text-secondary-400 underline decoration-secondary-400 duration-100 hover:opacity-70"
+				<a
+					href="/change-password"
+					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
 				>
 					<PencilIcon class="h-4" />
 					Edit
-				</button>
+				</a>
 			</div>
 		</div>
 	</div>

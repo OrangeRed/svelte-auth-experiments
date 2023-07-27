@@ -4,10 +4,11 @@ import { LuciaError } from 'lucia-auth';
 
 import { auth, emailVerificationToken } from '$lib/server/auth';
 import { handleLogInRedirect } from '$lib/utils/handleLoginRedirect';
-import type { DatabaseUser } from '$lib/server/schema/users';
-import type { Actions, PageServerLoad } from './$types';
 import { sendEmailVerificationLink } from '$lib/server/email';
 import { userSchema } from '$lib/validators';
+
+import type { DatabaseUser } from '$lib/server/schema/users';
+import type { Actions, PageServerLoad } from './$types';
 
 export type NameChangeSchema = typeof nameChangeSchema;
 
@@ -39,7 +40,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	} satisfies Partial<DatabaseUser>;
 
 	return {
-		form: superValidate(defaultValues, userSchema),
+		form: superValidate(defaultValues, userSchema, { errors: false }),
 		user: locals.user
 	};
 };
@@ -50,7 +51,7 @@ export const actions: Actions = {
 			throw error(500);
 		}
 
-		const form = await superValidate<EmailChangeSchema>(event, emailChangeScehma);
+		const form = await superValidate(event, emailChangeScehma);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -101,7 +102,7 @@ export const actions: Actions = {
 			throw error(500);
 		}
 
-		const form = await superValidate<NameChangeSchema>(event, nameChangeSchema);
+		const form = await superValidate(event, nameChangeSchema);
 
 		if (!form.valid) {
 			form.data.first_name = event.locals.user.firstName;
