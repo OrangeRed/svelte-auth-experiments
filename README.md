@@ -65,6 +65,7 @@ routes
 
 ## Todos maybe
 
+- [ ] Deploy app and database somewhere...
 - [ ] Create `with-lucia-v2` after the docs get updated
 - [ ] Create `raw-dog-auth` that doesn't use an Auth wrapper
 - [ ] Try implementing different OAuth providers
@@ -72,5 +73,5 @@ routes
   - [ ] Google
   - [ ] Discord
   - [ ] . . .
-- [ ] Set up [Send Grid](https://sendgrid.com/) so to actually send emails instead of printing to the console
+- [ ] Set up [Send Grid](https://sendgrid.com/) to actually send emails instead of printing to the console
 - [ ] Set up [Sentry](https://sentry.io/welcome/) to move errors out of the console
