@@ -1,6 +1,7 @@
 <script lang="ts">
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { ConicGradient, modalStore } from '@skeletonlabs/skeleton';
+	import { modalStore } from '@skeletonlabs/skeleton';
 	import { AlertCircleIcon, XIcon } from 'lucide-svelte';
 
 	import type { SuperValidated } from 'sveltekit-superforms';
@@ -65,14 +66,7 @@
 
 	<button type="submit" class="btn variant-filled-primary w-full">
 		{#if $delayed}
-			<ConicGradient
-				stops={[
-					{ color: 'transparent', start: 0, end: 25 },
-					{ color: 'rgb(var(--color-primary-900))', start: 75, end: 100 }
-				]}
-				spin
-				width="w-6"
-			/>
+			<LoadingSpinner />
 		{:else}
 			Change email
 		{/if}

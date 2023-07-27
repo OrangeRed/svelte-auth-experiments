@@ -1,6 +1,6 @@
 <script lang="ts">
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { ConicGradient } from '@skeletonlabs/skeleton';
 	import { AlertCircleIcon } from 'lucide-svelte';
 
 	import type { SuperValidated } from 'sveltekit-superforms';
@@ -67,20 +67,14 @@
 	</label>
 
 	<div class="flex justify-center text-sm">
-		<!-- TODO password reset -->
-		<a href="/" class="text-secondary-300 hover:underline">Forgot Password?</a>
+		<a href="/sign-in/forgot-password" class="text-secondary-300 hover:underline">
+			Forgot Password?
+		</a>
 	</div>
 
 	<button type="submit" class="btn variant-filled-primary w-full">
 		{#if $delayed}
-			<ConicGradient
-				stops={[
-					{ color: 'transparent', start: 0, end: 25 },
-					{ color: 'rgb(var(--color-primary-900))', start: 75, end: 100 }
-				]}
-				spin
-				width="w-6"
-			/>
+			<LoadingSpinner />
 		{:else}
 			Sign in
 		{/if}
