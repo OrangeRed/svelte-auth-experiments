@@ -11,7 +11,12 @@
 
 	const { form, errors, enhance, delayed } = superForm(data, {
 		defaultValidator: 'clear',
-		onError: 'apply'
+		onError: 'apply',
+		onResult: ({ result }) => {
+			if (result.type === 'redirect') {
+				modalStore.close();
+			}
+		}
 	});
 </script>
 

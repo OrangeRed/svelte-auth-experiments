@@ -2,6 +2,7 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { AlertCircleIcon } from 'lucide-svelte';
+	import { modalStore } from '@skeletonlabs/skeleton';
 
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { ChangePasswordSchema } from '$routes/change-password/+page.server';
@@ -10,7 +11,12 @@
 
 	const { form, errors, enhance, delayed } = superForm(data, {
 		defaultValidator: 'clear',
-		onError: 'apply'
+		onError: 'apply',
+		onResult: ({ result }) => {
+			if (result.type === 'redirect') {
+				modalStore.close();
+			}
+		}
 	});
 </script>
 
