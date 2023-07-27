@@ -11,10 +11,10 @@
 		$page.url.searchParams.get('message') || 'You must be signed in to access this page.';
 </script>
 
-<main class="flex h-full w-full flex-col items-center justify-center gap-4">
+<main class="flex h-full w-full flex-col items-center justify-center">
 	<section class="img-bg h-[32rem] w-[32rem]" />
 
-	{#if $page.url.searchParams.has('redirectTo')}
+	{#if $page.url.searchParams.get('message')}
 		<div class="variant-filled-error alert relative flex w-[32rem]">
 			<AlertTriangleIcon class="scale-125 fill-surface-500 text-error-500" />
 			<span class="text-md alert-message w-full">{redirectMessage}</span>
