@@ -15,16 +15,16 @@
 	<section class="img-bg h-[32rem] w-[32rem]" />
 
 	<div
-		class="w-[32rem] space-y-14 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
+		class="border-surface-400 bg-surface-500 text-token w-[32rem] space-y-14 rounded-xl border p-8 shadow-md"
 	>
-		<h2 class="h2 text-center underline decoration-primary-400">My Profile</h2>
+		<h2 class="h2 decoration-primary-400 text-center underline">My Profile</h2>
 
 		<div class="grid grid-cols-4">
 			<span class="opacity-70">Full Name</span>
 			<span class="col-span-2 mx-2 capitalize">{user.firstName} {user.lastName}</span>
 			<div class="flex justify-end">
 				<button
-					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
+					class="text-secondary-400 flex items-center underline duration-100 hover:opacity-70"
 					on:click={() =>
 						modalStore.trigger({
 							type: 'component',
@@ -42,7 +42,7 @@
 			<span class="col-span-2 mx-2">{user.email}</span>
 			<div class="flex justify-end">
 				<button
-					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
+					class="text-secondary-400 flex items-center underline duration-100 hover:opacity-70"
 					on:click={() =>
 						modalStore.trigger({
 							type: 'component',
@@ -60,7 +60,7 @@
 			<span class="col-span-2 mx-2 tracking-wide">********</span>
 			<div class="flex justify-end">
 				<button
-					class="flex items-center text-secondary-400 underline duration-100 hover:opacity-70"
+					class="text-secondary-400 flex items-center underline duration-100 hover:opacity-70"
 					on:click={() =>
 						modalStore.trigger({
 							type: 'component',

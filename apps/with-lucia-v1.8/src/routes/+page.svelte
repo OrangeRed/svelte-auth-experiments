@@ -11,13 +11,13 @@
 	{#if user}
 		<h2 class="h2 mb-12">
 			{greeting},
-			<span class="capitalize text-primary-400">{user.firstName} {user.lastName}</span>
+			<span class="text-primary-400 capitalize">{user.firstName} {user.lastName}</span>
 		</h2>
 
 		{#if !user.emailVerified}
 			<h3 class="h3 mb-24">
 				What's the secret image? <br />
-				<a class="underline decoration-primary-400 decoration-2" href="/verify-email">
+				<a class="decoration-primary-400 underline decoration-2" href="/verify-email">
 					Finish verifying
 				</a>
 				to find out.
@@ -26,7 +26,7 @@
 	{:else}
 		<h3 class="h3 mb-24">
 			What's the secret image? <br />
-			<a href="/sign-in" class="underline decoration-primary-400 decoration-2"> Sign in </a>
+			<a href="/sign-in" class="decoration-primary-400 underline decoration-2"> Sign in </a>
 			to find out.
 		</h3>
 	{/if}
@@ -38,7 +38,7 @@
 		<section class="img-bg" />
 		<svg
 			class={`
-					mb-24 -scale-x-[100%] fill-token
+					fill-token mb-24 -scale-x-[100%]
 					${blurImage ? 'blur-3xl' : ''}
 				`}
 			xmlns="http://www.w3.org/2000/svg"

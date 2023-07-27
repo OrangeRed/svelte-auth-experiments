@@ -7,16 +7,15 @@
 
 	export let data: PageData;
 
-	$: redirectMessage =
-		$page.url.searchParams.get('message') || 'You must be signed in to access this page.';
+	$: redirectMessage = $page.url.searchParams.get('message');
 </script>
 
 <main class="flex h-full w-full flex-col items-center justify-center">
 	<section class="img-bg h-[32rem] w-[32rem]" />
 
-	{#if $page.url.searchParams.get('message')}
-		<div class="variant-filled-error alert relative flex w-[32rem]">
-			<AlertTriangleIcon class="scale-125 fill-surface-500 text-error-500" />
+	{#if redirectMessage}
+		<div class="variant-filled-error alert relative my-4 flex w-[32rem]">
+			<AlertTriangleIcon class="fill-surface-500 text-error-500 scale-125" />
 			<span class="text-md alert-message w-full">{redirectMessage}</span>
 		</div>
 	{/if}

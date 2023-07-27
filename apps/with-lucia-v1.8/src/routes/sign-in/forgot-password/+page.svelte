@@ -16,11 +16,11 @@
 	<section class="img-bg h-[32rem] w-[32rem]" />
 
 	<form
-		class="relative w-[32rem] space-y-6 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
+		class="border-surface-400 bg-surface-500 text-token relative w-[32rem] space-y-6 rounded-xl border p-8 shadow-md"
 		method="POST"
 		use:enhance
 	>
-		<h2 class="h2 text-center underline decoration-primary-400">Forgot your password?</h2>
+		<h2 class="h2 decoration-primary-400 text-center underline">Forgot your password?</h2>
 
 		<p class="text-center">We can send an email to reset your password.</p>
 
@@ -52,7 +52,7 @@
 		</button>
 
 		{#if $message}
-			<p class="text-center font-semibold text-secondary-300">{$message}</p>
+			<p class="text-secondary-300 text-center font-semibold">{$message}</p>
 		{:else}
 			<div class="flex justify-center">
 				<a href="/sign-in" class="text-secondary-300 hover:underline hover:opacity-80">

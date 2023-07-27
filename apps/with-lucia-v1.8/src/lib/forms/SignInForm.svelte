@@ -18,11 +18,11 @@
 </script>
 
 <form
-	class="w-[32rem] space-y-6 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
+	class="border-surface-400 bg-surface-500 text-token w-[32rem] space-y-6 rounded-xl border p-8 shadow-md"
 	method="POST"
 	use:enhance
 >
-	<h2 class="h2 text-center underline decoration-primary-400">Sign in</h2>
+	<h2 class="h2 decoration-primary-400 text-center underline">Sign in</h2>
 
 	{#if $errors._errors}
 		<p class="text-center font-semibold text-red-500">{$errors._errors[0]}</p>

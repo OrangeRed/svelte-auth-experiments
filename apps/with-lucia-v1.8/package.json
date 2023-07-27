@@ -1,5 +1,5 @@
 {
-	"name": "svelte-saas",
+	"name": "with-lucia-v1.8",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -11,43 +11,29 @@
 		"drizzle:studio": "drizzle-kit studio",
 		"drizzle:generate": "drizzle-kit generate:mysql",
 		"drizzle:introspect": "drizzle-kit introspect:mysql",
-		"drizzle:push": "drizzle-kit push:mysql",
-		"prettier:lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"prettier:format": "prettier --plugin-search-dir . --write .",
-		"postinstall": "husky install"
+		"drizzle:push": "drizzle-kit push:mysql"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^17.6.6",
-		"@commitlint/config-conventional": "^17.6.6",
 		"@floating-ui/dom": "^1.4.4",
 		"@skeletonlabs/skeleton": "^1.9.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@tailwindcss/forms": "^0.5.3",
 		"@tailwindcss/typography": "^0.5.9",
-		"@total-typescript/ts-reset": "^0.4.2",
-		"@typescript-eslint/eslint-plugin": "^5.45.0",
-		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.14",
-		"clsx": "^2.0.0",
 		"dotenv": "^16.3.1",
 		"drizzle-kit": "^0.19.3",
-		"eslint": "^8.28.0",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-plugin-svelte": "^2.26.0",
-		"husky": "^8.0.3",
 		"postcss": "^8.4.25",
-		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.8.1",
 		"prettier-plugin-tailwindcss": "^0.4.0",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
 		"sveltekit-superforms": "^1.3.0",
-		"tailwind-merge": "^1.14.0",
 		"tailwindcss": "^3.3.2",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
-		"vite": "^4.3.0"
+		"vite": "^4.3.0",
+		"zod": "^3.21.4"
 	},
 	"type": "module",
 	"dependencies": {
@@ -57,12 +43,6 @@
 		"drizzle-zod": "^0.4.4",
 		"lucia-auth": "^1.8.0",
 		"lucide-svelte": "^0.260.0",
-		"mysql2": "^3.5.2",
-		"zod": "^3.21.4"
-	},
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
+		"mysql2": "^3.5.2"
 	}
 }

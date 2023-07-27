@@ -5,15 +5,15 @@
 	import { AlertCircleIcon, XIcon } from 'lucide-svelte';
 
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import type { NameChangeSchema } from '$routes/profile/+page.server';
+	import type { EmailChangeSchema } from '$routes/profile/+page.server';
 
-	export let data: SuperValidated<NameChangeSchema>;
+	export let data: SuperValidated<EmailChangeSchema>;
 
 	const { form, errors, enhance, delayed } = superForm(data, {
 		defaultValidator: 'clear',
 		onError: 'apply',
-		onUpdate: ({ form }) => {
-			if (form.valid) {
+		onResult: ({ result }) => {
+			if (result.type === 'redirect') {
 				modalStore.close();
 			}
 		}
@@ -21,52 +21,51 @@
 </script>
 
 <form
-	class="relative w-[32rem] space-y-6 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
+	class="border-surface-400 bg-surface-500 text-token absolute w-[32rem] space-y-6 rounded-xl border p-8 shadow-md"
 	method="POST"
-	action="?/changeName"
+	action="?/changeEmail"
 	use:enhance
 >
-	<h2 class="h2 text-center underline decoration-primary-400">Update Profile</h2>
+	<h2 class="h2 decoration-primary-400 text-center underline">Change Email</h2>
 
 	{#if $errors._errors}
 		<p class="text-center font-semibold text-red-500">{$errors._errors[0]}</p>
 	{/if}
 
 	<label class="label relative">
-		<span>First Name</span>
+		<span>New Email</span>
 		<input
-			id="first_name"
-			name="first_name"
-			type="text"
+			id="new_email"
+			name="new_email"
+			type="email"
 			class="input"
-			placeholder="First Name"
-			autocomplete="name"
-			data-invalid={$errors.first_name}
-			bind:value={$form.first_name}
-			class:input-error={$errors.first_name}
+			placeholder="New Email"
+			autocomplete="email"
+			data-invalid={$errors.new_email}
+			bind:value={$form.new_email}
+			class:input-error={$errors.new_email}
 		/>
-		{#if $errors.first_name}
+		{#if $errors.new_email}
 			<AlertCircleIcon class="absolute bottom-[2.2rem] right-0 mx-3 text-red-500" />
-			<small class="text-red-500">{$errors.first_name?.[0] ?? ''}</small>
+			<small class="text-red-500">{$errors.new_email?.[0] ?? ''}</small>
 		{/if}
 	</label>
 
 	<label class="label relative">
-		<span>Last Name</span>
+		<span>Confirm Password</span>
 		<input
-			id="last_name"
-			name="last_name"
-			type="text"
+			id="confirm_password"
+			name="confirm_password"
+			type="password"
 			class="input"
-			placeholder="Last Name"
-			autocomplete="family-name"
-			data-invalid={$errors.last_name}
-			bind:value={$form.last_name}
-			class:input-error={$errors.last_name}
+			placeholder="Confirm Password"
+			data-invalid={$errors.confirm_password}
+			bind:value={$form.confirm_password}
+			class:input-error={$errors.confirm_password}
 		/>
-		{#if $errors.last_name}
+		{#if $errors.confirm_password}
 			<AlertCircleIcon class="absolute bottom-[2.2rem] right-0 mx-3 text-red-500" />
-			<small class="text-red-500">{$errors.last_name?.[0] ?? ''}</small>
+			<small class="text-red-500">{$errors.confirm_password?.[0] ?? ''}</small>
 		{/if}
 	</label>
 
@@ -74,7 +73,7 @@
 		{#if $delayed}
 			<LoadingSpinner />
 		{:else}
-			Update Profile
+			Change email
 		{/if}
 	</button>
 
