@@ -1,0 +1,64 @@
+<script lang="ts">
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
+	import { superForm } from 'sveltekit-superforms/client';
+	import { AlertCircleIcon } from 'lucide-svelte';
+
+	import type { PageData } from './$types';
+	export let data: PageData;
+
+	const { form, message, errors, enhance, delayed } = superForm(data.form, {
+		defaultValidator: 'clear',
+		onError: 'apply'
+	});
+</script>
+
+<main class="flex h-full w-full flex-col items-center justify-center gap-4">
+	<section class="img-bg h-[32rem] w-[32rem]" />
+
+	<form
+		class="relative w-[32rem] space-y-6 rounded-xl border border-surface-400 bg-surface-500 p-8 shadow-md text-token"
+		method="POST"
+		use:enhance
+	>
+		<h2 class="h2 text-center underline decoration-primary-400">Forgot your password?</h2>
+
+		<p class="text-center">We can send an email to reset your password.</p>
+
+		<label class="label relative">
+			<span>Email</span>
+			<input
+				id="email"
+				name="email"
+				type="email"
+				class="input"
+				placeholder="john@example.com"
+				autocomplete="email"
+				data-invalid={$errors.email}
+				bind:value={$form.email}
+				class:input-error={$errors.email}
+			/>
+			{#if $errors.email}
+				<AlertCircleIcon class="absolute bottom-[2.2rem] right-0 mx-3 text-red-500" />
+				<small class="text-red-500">{$errors.email[0]}</small>
+			{/if}
+		</label>
+
+		<button type="submit" class="btn variant-filled-primary w-full">
+			{#if $delayed}
+				<LoadingSpinner />
+			{:else}
+				Reset Password
+			{/if}
+		</button>
+
+		{#if $message}
+			<p class="text-center font-semibold text-secondary-300">{$message}</p>
+		{:else}
+			<div class="flex justify-center">
+				<a href="/sign-in" class="text-secondary-300 hover:underline hover:opacity-80">
+					Go back to sign in
+				</a>
+			</div>
+		{/if}
+	</form>
+</main>
