@@ -38,7 +38,7 @@ export const actions: Actions = {
 			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {
 				return message(
 					form,
-					`If a matching account was found an email was sent to "${form.data.email}" to allow you to reset your password.`
+					`If a matching account was found, an email was sent to ${form.data.email} to allow you to reset your password.`
 				);
 			}
 
@@ -48,7 +48,7 @@ export const actions: Actions = {
 
 		return message(
 			form,
-			`If a matching account was found an email was sent to ${form.data.email} to allow you to reset your password.`
+			`If a matching account was found, an email was sent to ${form.data.email} to allow you to reset your password.`
 		);
 	}
 };

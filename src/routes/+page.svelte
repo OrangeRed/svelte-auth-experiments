@@ -17,7 +17,7 @@
 		{#if !user.emailVerified}
 			<h3 class="h3 mb-24">
 				What's the secret image? <br />
-				<a class="underline decoration-primary-400 decoration-2" href="/email-verification">
+				<a class="underline decoration-primary-400 decoration-2" href="/verify-email">
 					Finish verifying
 				</a>
 				to find out.
@@ -34,7 +34,7 @@
 	<br />
 
 	<!-- Animated Logo -->
-	<figure class="relative flex flex-col">
+	<figure>
 		<section class="img-bg" />
 		<svg
 			class={`

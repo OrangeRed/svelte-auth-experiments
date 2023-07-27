@@ -95,7 +95,7 @@ export const actions: Actions = {
 			throw error(500);
 		}
 
-		throw redirect(302, '/email-verification');
+		throw redirect(302, '/verify-email');
 	},
 	changeName: async (event) => {
 		if (!event.locals.user) {
