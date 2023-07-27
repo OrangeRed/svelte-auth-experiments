@@ -8,6 +8,10 @@ Just a repo containing some experiments with authentication inside Sveltekit
 # Start the docker container that will hold the mysql database
 $ docker-compose up -d
 
+# Create a .env file to access the database
+# Feel free to change these values to match your database
+$ cp apps/with-lucia-v1.8/.env.example apps/with-lucia-v1.8/.env
+
 # Install packages
 $ pnpm -r i
 
