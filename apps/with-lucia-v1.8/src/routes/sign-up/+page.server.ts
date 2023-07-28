@@ -1,5 +1,6 @@
 import { LuciaError } from 'lucia-auth';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { userSchema } from '$lib/validators';
@@ -49,6 +50,8 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
+		let flash: App.PageData['flash'];
+
 		try {
 			// auth.createUser({...})` is more than happy to insert a duplicate user into the auth_user table
 			// this check makes sure the user's key doesn't exist before inserting a new user into the database
@@ -73,7 +76,10 @@ export const actions: Actions = {
 			]);
 
 			event.locals.auth.setSession(session);
-			sendEmailVerificationLink(token.toString());
+			flash = {
+				type: 'success',
+				message: sendEmailVerificationLink(event, token.toString())
+			};
 		} catch (e) {
 			if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
 				return setError(form, 'User already exists');
@@ -82,6 +88,6 @@ export const actions: Actions = {
 			throw error(500);
 		}
 
-		throw redirect(302, '/verify-email');
+		throw redirect(302, '/verify-email', flash, event);
 	}
 };

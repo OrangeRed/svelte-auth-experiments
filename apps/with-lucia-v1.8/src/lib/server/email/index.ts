@@ -1,11 +1,11 @@
 // TODO use sendgrid and actually send out an email
 
-export const sendEmailVerificationLink = async (token: string) => {
-	const url = `http://localhost:5173/verify-email/${token}`;
-	console.log(`\nYour email verification link: ${url}`);
+import type { RequestEvent } from '@sveltejs/kit';
+
+export const sendEmailVerificationLink = (event: RequestEvent, token: string) => {
+	return `<a href="${event.url.origin}/verify-email/${token}">Verify Email</a>`;
 };
 
-export const sendPasswordResetLink = async (token: string) => {
-	const url = `http://localhost:5173/change-password/${token}`;
-	console.log(`\nYour password reset link: ${url}`);
+export const sendPasswordResetLink = (event: RequestEvent, token: string) => {
+	return `<a href="${event.url.origin}/change-password/${token}">Change Password</a>`;
 };

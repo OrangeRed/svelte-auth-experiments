@@ -2,9 +2,13 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { AlertCircleIcon } from 'lucide-svelte';
+	import { page } from '$app/stores';
+	import { getFlash } from 'sveltekit-flash-message/client';
 
 	import type { PageData } from './$types';
 	export let data: PageData;
+
+	const flash = getFlash(page);
 
 	const { form, message, errors, enhance, delayed } = superForm(data.form, {
 		defaultValidator: 'clear',
@@ -61,4 +65,12 @@
 			</div>
 		{/if}
 	</form>
+
+	{#if $flash}
+		<div class="variant-filled-success alert relative my-4 flex w-[32rem]">
+			<span class="text-md alert-message w-full whitespace-pre-wrap text-center [&>a]:underline">
+				{@html $flash.message}
+			</span>
+		</div>
+	{/if}
 </main>

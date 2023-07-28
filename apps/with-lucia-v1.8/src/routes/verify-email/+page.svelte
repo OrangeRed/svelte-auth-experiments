@@ -1,8 +1,12 @@
 <script lang="ts">
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+	import { getFlash } from 'sveltekit-flash-message/client';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
+
+	const flash = getFlash(page);
 
 	let submitting = false;
 	const submitForm: SubmitFunction = () => {
@@ -17,7 +21,7 @@
 	};
 </script>
 
-<main class="flex h-full w-full items-center justify-center">
+<main class="flex h-full w-full flex-col items-center justify-center">
 	<section class="img-bg h-[32rem] w-[32rem]" />
 
 	<form
@@ -30,9 +34,7 @@
 		{#if submitting}
 			<LoadingSpinner />
 		{:else}
-			<p class="text-center">
-				A verification email was sent to your inbox. <br /> (i.e. console)
-			</p>
+			<p class="text-center">Please verify your email address.</p>
 
 			<div class="flex justify-center">
 				<button type="submit" class="btn variant-filled-primary">
@@ -41,4 +43,12 @@
 			</div>
 		{/if}
 	</form>
+
+	{#if !submitting && $flash}
+		<div class="variant-filled-success alert relative my-4 flex w-[32rem]">
+			<span class="text-md alert-message w-full whitespace-pre-wrap text-center [&>a]:underline">
+				{@html $flash.message}
+			</span>
+		</div>
+	{/if}
 </main>

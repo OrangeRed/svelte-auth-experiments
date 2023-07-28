@@ -1,4 +1,5 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { redirect } from 'sveltekit-flash-message/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { LuciaError } from 'lucia-auth';
 
@@ -57,21 +58,23 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 };
 
 export const actions: Actions = {
-	changeEmail: async ({ locals, request, url }) => {
-		if (!locals.user) {
-			throw redirect(302, handleLogInRedirect(url));
+	changeEmail: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, handleLogInRedirect(event.url));
 		}
 
-		const form = await superValidate(request, emailChangeSchema);
+		const form = await superValidate(event, emailChangeSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
+		let flash: App.PageData['flash'];
+
 		try {
 			// Throws if the password is wrong
-			await auth.useKey('email', locals.user.email, form.data.confirm_password);
-			await auth.deleteKey('email', locals.user.email);
+			await auth.useKey('email', event.locals.user.email, form.data.confirm_password);
+			await auth.deleteKey('email', event.locals.user.email);
 
 			const newAttributes = {
 				email: form.data.new_email,
@@ -79,7 +82,7 @@ export const actions: Actions = {
 			} satisfies Partial<DatabaseUser>;
 
 			const { email: newEmail, userId } = await auth.updateUserAttributes(
-				locals.user.userId,
+				event.locals.user.userId,
 				newAttributes
 			);
 
@@ -92,7 +95,10 @@ export const actions: Actions = {
 			});
 
 			const token = await emailVerificationToken.issue(userId);
-			sendEmailVerificationLink(token.toString());
+			flash = {
+				type: 'success',
+				message: sendEmailVerificationLink(event, token.toString())
+			};
 		} catch (e) {
 			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_PASSWORD') {
 				return setError(form, 'confirm_password', 'Incorrect password.');
@@ -106,7 +112,7 @@ export const actions: Actions = {
 			throw error(500);
 		}
 
-		throw redirect(302, '/verify-email');
+		throw redirect(302, '/verify-email', flash, event);
 	},
 	changeName: async ({ locals, request, url }) => {
 		if (!locals.user) {
@@ -160,9 +166,6 @@ export const actions: Actions = {
 			throw error(500);
 		}
 
-		throw redirect(
-			302,
-			handleLogInRedirect(url, 'Your password has been changed, please sign in again.')
-		);
+		throw redirect(302, `/sign-in?message=Your password has been changed, please sign in again.`);
 	}
 };
