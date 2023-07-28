@@ -2,10 +2,10 @@ import { dev } from '$app/environment';
 
 import lucia from 'lucia-auth';
 import { sveltekit } from 'lucia-auth/middleware';
-import { mysql2 } from '@lucia-auth/adapter-mysql';
+import { planetscale } from '@lucia-auth/adapter-mysql';
 import { idToken } from '@lucia-auth/tokens';
 
-import { connectionPool } from '$lib/server/db';
+import { connection } from '$lib/server/db';
 
 /**
  * Resulting type defintion of `user` from Lucia
@@ -21,7 +21,8 @@ export type User = {
 export type LuciaAuth = typeof auth;
 
 export const auth = lucia({
-	adapter: mysql2(connectionPool),
+	// @ts-expect-error // planetscale adapter type doesn't match drizzle type?
+	adapter: planetscale(connection),
 	env: dev ? 'DEV' : 'PROD',
 	middleware: sveltekit(),
 

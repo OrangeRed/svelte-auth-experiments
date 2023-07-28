@@ -19,20 +19,16 @@ $ pnpm -r i
 $ pnpm --filter with-lucia-v1.8 dev
 ```
 
-### Projects
+## Projects
 
 <details>
-<summary> <strong>Lucia Auth v.18</strong> </summary>
+<summary> <strong>Lucia Auth v1.8</strong> </summary>
 
 <br>
 
-Midway through building this app, Lucia had been updated from v1.8 to v2 which brought with it massive breaking changes and, more regrettably, the loss of all v1.8 documentation that I was using as reference. \*\*
+\*\* Midway through building this app, Lucia had been updated from v1.8 to v2 which brought with it massive breaking changes and, more regrettably, the loss of all v1.8 documentation that I was using as reference.
 
 Maybe later I will consider redoing everything using Lucia v2
-
-## Sveltekit application using Lucia Auth
-
-A basic application that uses [lucia-auth](https://lucia-auth.com/) to handle the basic auth operations
 
 ## Project structure
 
