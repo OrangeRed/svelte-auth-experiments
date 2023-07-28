@@ -5,7 +5,10 @@ A repo containing my experiments with authentication inside Sveltekit
 ## Projects
 
 <details>
-<summary> <strong>Lucia Auth v1.8</strong> </summary>
+<summary>
+  <strong>Lucia Auth v1.8</strong> : : 
+  <a href="https://sprightly-pavlova-2c5afc.netlify.app/">Live Preview</a>
+</summary>
 
 <br>
 
@@ -68,7 +71,7 @@ routes
 
 ## Todos maybe
 
-- [ ] Deploy app and database somewhere...
+- [x] Deploy app and database somewhere...
 - [ ] Create `with-lucia-v2` after the docs get updated
 - [ ] Create `raw-dog-auth` that doesn't use an Auth wrapper
 - [ ] Try implementing different OAuth providers
