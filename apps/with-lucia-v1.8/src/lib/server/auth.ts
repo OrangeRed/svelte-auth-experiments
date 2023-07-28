@@ -21,8 +21,9 @@ export type User = {
 export type LuciaAuth = typeof auth;
 
 export const auth = lucia({
-	// @ts-expect-error // planetscale adapter type doesn't match drizzle type?
+	// @ts-expect-error // typeof lucia planetscale adapter doesn't match offical planetscale type?
 	adapter: planetscale(connection),
+	// adapter: mysql2(connection),
 	env: dev ? 'DEV' : 'PROD',
 	middleware: sveltekit(),
 
