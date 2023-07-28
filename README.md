@@ -2,23 +2,6 @@
 
 A repo containing my experiments with authentication inside Sveltekit
 
-## Setup
-
-```sh
-# Start the docker container that will hold the mysql database
-$ docker-compose up -d
-
-# Create a .env file to access the database
-# Feel free to change these values to match your database
-$ cp apps/with-lucia-v1.8/.env.example apps/with-lucia-v1.8/.env
-
-# Install packages
-$ pnpm -r i
-
-# Run the app
-$ pnpm --filter with-lucia-v1.8 dev
-```
-
 ## Projects
 
 <details>
@@ -26,9 +9,32 @@ $ pnpm --filter with-lucia-v1.8 dev
 
 <br>
 
-\*\* Midway through building this app, Lucia had been updated from v1.8 to v2 which brought with it massive breaking changes and, more regrettably, the loss of all v1.8 documentation that I was using as reference.
+\*\* Midway through building this app, Lucia had been updated from v1.8 to v2 which brought with it massive breaking changes and, more regrettably, the loss of all v1.8 documentation that I was using as reference. Maybe later I will consider redoing everything using Lucia v2
 
-Maybe later I will consider redoing everything using Lucia v2
+## Setup
+
+1. Install all packages. `pnpm -r i`
+2. Create a .env file with your database connection variables.
+   - Look at `apps/with-lucia-v1.8/.env.example`
+3. Push the schema defintions to planetscale. `pnpm drizzle:push`
+4. Run the app. `cd apps/with-lucia-v1.8 && pnpm dev`
+
+<details>
+<summary><strong>Local MySQL Image</strong></summary>
+
+<br>
+
+If you don't want to use planetscale and would rather use a local MySQL docker image make sure you do the following things
+
+1. Install the mysql2 driver `pnpm i mysql2`
+2. Update the database config to use the mysql2 driver in `$lib/server/db.ts`
+3. Update the lucia config to use the new database config in `$lib/server/auth.ts`
+4. Update the schemas to add back foreign keys since planetscale doesn't use them
+5. Start the docker container with the mysql2 image. `docker-compose up -d`
+6. Update the .env file with your database variables.
+7. Push your schemas up to the database. `pnpm drizzle:push`
+
+</details>
 
 ## Project structure
 
