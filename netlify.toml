@@ -1,4 +1,4 @@
 [build]
-    base = "apps/with-lucia-v1.8"
+    base = "apps/with-lucia-v1.8/"
     publish = "build"
     command = "pnpm build"
