@@ -17,7 +17,10 @@
 		{#if !user.emailVerified}
 			<h3 class="h3 mb-24">
 				What's the secret image? <br />
-				<a class="decoration-primary-400 underline decoration-2" href="/verify-email">
+				<a
+					class="decoration-primary-400 underline decoration-2 duration-150 hover:opacity-70"
+					href="/verify-email"
+				>
 					Finish verifying
 				</a>
 				to find out.
@@ -26,7 +29,12 @@
 	{:else}
 		<h3 class="h3 mb-24">
 			What's the secret image? <br />
-			<a href="/sign-in" class="decoration-primary-400 underline decoration-2"> Sign in </a>
+			<a
+				href="/sign-in"
+				class="decoration-primary-400 underline decoration-2 duration-150 hover:opacity-70"
+			>
+				Sign in
+			</a>
 			to find out.
 		</h3>
 	{/if}

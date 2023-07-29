@@ -8,6 +8,7 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { AppBar, AppShell, Avatar, Modal } from '@skeletonlabs/skeleton';
 	import { page, navigating } from '$app/stores';
+	import { GithubIcon } from 'lucide-svelte';
 
 	import type { PageData } from './$types';
 
@@ -69,8 +70,12 @@
 
 	<!-- Footer -->
 	<svelte:fragment slot="footer">
-		<div class="flex h-full w-full flex-row justify-center bg-transparent py-4">
-			<a href="/" class="px-4 hover:underline">Home</a>
+		<div class="flex h-full w-full flex-row justify-between bg-transparent p-4">
+			<div />
+			<a href="/" class="duration-150 hover:underline hover:opacity-70">Home</a>
+			<a href="https://github.com/OrangeRed/svelte-auth-experiments" target="_blank">
+				<GithubIcon class="w-full duration-150 hover:opacity-70" />
+			</a>
 		</div>
 	</svelte:fragment>
 </AppShell>
