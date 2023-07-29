@@ -40,27 +40,37 @@ const changePasswordSchema = userSchema
 		path: ['confirm_password']
 	});
 
-export const load: PageServerLoad = async ({ locals, url }) => {
-	if (!locals.user) {
-		throw redirect(302, handleLogInRedirect(url));
+export const load: PageServerLoad = async (event) => {
+	if (!event.locals.user) {
+		throw redirect(
+			302,
+			handleLogInRedirect(event),
+			{ type: 'error', message: 'You must be signed in to access this page.' },
+			event
+		);
 	}
 
 	const defaultValues = {
-		email: locals.user.email,
-		first_name: locals.user.firstName,
-		last_name: locals.user.lastName
+		email: event.locals.user.email,
+		first_name: event.locals.user.firstName,
+		last_name: event.locals.user.lastName
 	} satisfies Partial<DatabaseUser>;
 
 	return {
 		form: superValidate(defaultValues, userSchema, { errors: false }),
-		user: locals.user
+		user: event.locals.user
 	};
 };
 
 export const actions: Actions = {
 	changeEmail: async (event) => {
 		if (!event.locals.user) {
-			throw redirect(302, handleLogInRedirect(event.url));
+			throw redirect(
+				302,
+				handleLogInRedirect(event),
+				{ type: 'error', message: 'You must be signed in to access this page.' },
+				event
+			);
 		}
 
 		const form = await superValidate(event, emailChangeSchema);
@@ -114,16 +124,21 @@ export const actions: Actions = {
 
 		throw redirect(302, '/verify-email', flash, event);
 	},
-	changeName: async ({ locals, request, url }) => {
-		if (!locals.user) {
-			throw redirect(302, handleLogInRedirect(url));
+	changeName: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(
+				302,
+				handleLogInRedirect(event),
+				{ type: 'error', message: 'You must be signed in to access this page.' },
+				event
+			);
 		}
 
-		const form = await superValidate(request, nameChangeSchema);
+		const form = await superValidate(event, nameChangeSchema);
 
 		if (!form.valid) {
-			form.data.first_name = locals.user.firstName;
-			form.data.last_name = locals.user.lastName;
+			form.data.first_name = event.locals.user.firstName;
+			form.data.last_name = event.locals.user.lastName;
 
 			return fail(400, { form });
 		}
@@ -134,7 +149,7 @@ export const actions: Actions = {
 				last_name: form.data.last_name
 			} satisfies Partial<DatabaseUser>;
 
-			await auth.updateUserAttributes(locals.user.userId, newAttributes);
+			await auth.updateUserAttributes(event.locals.user.userId, newAttributes);
 		} catch (e) {
 			console.log(e);
 			throw error(500);
@@ -142,30 +157,40 @@ export const actions: Actions = {
 
 		return message(form, 'Profile has been successfully updated');
 	},
-	changePassword: async ({ locals, request, url }) => {
-		if (!locals.user) {
-			throw redirect(302, handleLogInRedirect(url));
+	changePassword: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(
+				302,
+				handleLogInRedirect(event),
+				{ type: 'error', message: 'You must be signed in to access this page.' },
+				event
+			);
 		}
 
-		const form = await superValidate(request, changePasswordSchema);
+		const form = await superValidate(event, changePasswordSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		try {
-			await auth.updateKeyPassword('email', locals.user.email, form.data.password);
+			await auth.updateKeyPassword('email', event.locals.user.email, form.data.password);
 
 			await Promise.all([
-				locals.auth.setSession(null),
-				auth.invalidateAllUserSessions(locals.user.userId),
-				passwordResetToken.invalidateAllUserTokens(locals.user.userId)
+				event.locals.auth.setSession(null),
+				auth.invalidateAllUserSessions(event.locals.user.userId),
+				passwordResetToken.invalidateAllUserTokens(event.locals.user.userId)
 			]);
 		} catch (e) {
 			console.log(e);
 			throw error(500);
 		}
 
-		throw redirect(302, `/sign-in?message=Your password has been changed, please sign in again.`);
+		throw redirect(
+			302,
+			'/sign-in',
+			{ type: 'success', message: 'Your password has been changed, please sign in again.' },
+			event
+		);
 	}
 };
