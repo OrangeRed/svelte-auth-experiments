@@ -6,7 +6,7 @@ A repo containing my experiments with authentication inside Sveltekit
 
 <details>
 <summary>
-  <strong>Lucia Auth v1.8</strong> : : 
+  <strong>Lucia Auth v1.8</strong> : 
   <a href="https://sprightly-pavlova-2c5afc.netlify.app/">Live Preview</a>
 </summary>
 
